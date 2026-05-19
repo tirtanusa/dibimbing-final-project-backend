@@ -8,58 +8,76 @@ use App\Models\TimeSlot;
 use App\Models\BarberSchedule;
 use App\Models\Service;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class TimeSlotController extends Controller
 {
     use ApiResponse;
-    public function index(){
-        $slots = TimeSlot::all();
+    public function index(Request $request){
+        $slots = TimeSlot::where('barber_id', $request->barber_id)
+            ->where('date', $request->date)
+            ->when($request->status, fn($q) => $q->where('status', $request->status))
+            ->paginate($request->get('limit', 10));
+            
         return $this->successResponse($slots, 'Data time slot berhasil diambil');
     }
 
     public function block(string $id){
         $slot = TimeSlot::findOrFail($id);
+        if($slot->status == 'blocked' || $slot->status == 'booked'){
+            return $this->errorResponse('Slot waktu sudah di-block atau di-booking', 400);
+        }
         $slot->update(['status' => 'blocked']);
         return $this->successResponse($slot, 'Slot waktu berhasil di-block');
     }
 
     public function unblock(string $id){
         $slot = TimeSlot::findOrFail($id);
+        if($slot->status == 'available' || $slot->status == 'booked'){
+            return $this->errorResponse('Slot waktu sedang Available atau di-booking', 400);
+        }
         $slot->update(['status' => 'available']);
         return $this->successResponse($slot, 'Slot waktu berhasil di-unblock');
     }
 
-    public function generate(string $date, string $barberId){
-        $generate = DB::transaction(function () use ($date, $barberId) {
-            $dayOfWeek = date('w', strtotime($date));
-            // Ambil jadwal keja barber di hari tertentu
-            $schedule = BarberSchedule::where('barber_id', $barberId)->where('day_of_week', $dayOfWeek)->first();
-            
-            if($schedule == null){
-                return $this->errorResponse('Barber tidak memiliki jadwal di hari ini', 404);
-            }
-            // Ambil durasi service terpendek
-            $minDuration = Service::min('duration');
-            if($minDuration == null){
-                return $this->errorResponse('Barber tidak memiliki service', 404);
-            }
-            // Loop jadwal kerja berdasarkan start_time -> end_time
-            // Insert ke time_slot dengan status available
+    public function generate(Request $request, string $barberId, string $date)
+    {
+        $dayOfWeek = date('w', strtotime($date));
 
-            // Notes : skip jika slot untuk barber + tanggal tersebut sudah ada di database
-            $startTime = $schedule->start_time;
-            $endTime = $schedule->end_time;
-            while ($startTime < $endTime) {
-                TimeSlot::create([
-                    'date' => $date,
-                    'barber_id' => $barberId,
-                    'start_time' => $startTime,
-                    'end_time' => $startTime + $duration,
-                    'status' => 'available'
-                ]);
-                $startTime += $duration;
+        $schedule = BarberSchedule::where('barber_id', $barberId)
+            ->where('day_of_week', $dayOfWeek)
+            ->where('is_active', true)
+            ->first();
+
+        if (!$schedule) {
+            return $this->errorResponse(null, 'Barber tidak memiliki jadwal di hari ini', 404);
+        }
+
+        $minDuration = Service::min('duration_minutes');
+        if (!$minDuration) {
+            return $this->errorResponse(null, 'Tidak ada service yang tersedia', 404);
+        }
+
+        DB::transaction(function () use ($barberId, $date, $schedule, $minDuration) {
+            $current = Carbon::createFromFormat('H:i:s', $schedule->start_time);
+            $end = Carbon::createFromFormat('H:i:s', $schedule->end_time);
+
+            while ($current->copy()->addMinutes($minDuration)->lte($end)) {
+                TimeSlot::firstOrCreate(
+                    [
+                        'barber_id' => $barberId,
+                        'date' => $date,
+                        'start_time' => $current->format('H:i'),
+                    ],
+                    [
+                        'end_time' => $current->copy()->addMinutes($minDuration)->format('H:i'),
+                        'status' => 'available',
+                    ]
+                );
+                $current->addMinutes($minDuration);
             }
         });
 
+        return $this->successResponse(null, 'Slot waktu berhasil di-generate');
     }
 }
