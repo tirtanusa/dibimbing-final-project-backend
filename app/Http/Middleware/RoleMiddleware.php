@@ -19,14 +19,16 @@ class RoleMiddleware
 
     use ApiResponse;
 
-    public function handle($request, Closure $next, $role)
+    public function handle($request, Closure $next, string ...$roles)
     {
-
-        //Allow only instructor to access
-        if(Auth::check() && Auth::user()->role == $role){
-            return $next($request);
+        if (!Auth::check()) {
+            return $this->unauthorizedResponse();
         }
 
-        return $this->unauthorizedResponse();
+        if (!in_array(Auth::user()->role, $roles)) {
+            return $this->unauthorizedResponse();
+        }
+
+        return $next($request);
     }
 }

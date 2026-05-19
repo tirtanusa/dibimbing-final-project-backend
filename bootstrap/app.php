@@ -24,22 +24,35 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
-        //
+
         $exceptions->render(function (UnauthorizedException $e, Request $request) {
-            if($request->is('api/*')){
-                return $this->unauthorizedResponse('Anda tidak memiliki akses untuk mengubah data ini');
+            if ($request->is('api/*')) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Anda tidak memiliki akses untuk mengubah data ini',
+                    'data' => null
+                ], 403);
             }
         });
 
         $exceptions->render(function (NotFoundHttpException $e, Request $request) {
-            if($request->is('api/*')){
-                return $this->notFoundResponse('API Route Not Found');
+            if ($request->is('api/*')) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'API Route Not Found',
+                    'data' => null
+                ], 404);
             }
         });
 
         $exceptions->render(function (AuthenticationException $e, Request $request) {
-            if($request->is('api/*')){
-                return $this->notLoggedInResponse('Anda belum login');
+            if ($request->is('api/*')) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Anda belum login',
+                    'data' => null
+                ], 401);
             }
         });
+
     })->create();

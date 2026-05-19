@@ -6,8 +6,10 @@ use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Traits\ApiResponse;
 use App\Models\TransactionItem;
+use App\Models\Transaction;
 use App\Models\Booking;
 use App\Models\Barber;
+use App\Models\User;
 use Illuminate\Support\Facades\DB;
 
 class ReportController extends Controller
@@ -28,7 +30,7 @@ class ReportController extends Controller
     {
         $services = Booking::select('service_id', DB::raw('COUNT(*) as total_booked'))
             ->with('service:id,name,price,duration_minutes')
-            ->where('status', ['completed'])
+            ->where('status', 'completed')
             ->groupBy('service_id')
             ->orderBy('total_booked', 'desc')
             ->limit(10)
@@ -66,12 +68,38 @@ class ReportController extends Controller
         return $this->successResponse($barbers, 'Top barber berhasil diambil');
     }
 
-    public function revenue()
+    public function revenue(Request $request)
     {
-        $revenue = Booking::select('status', DB::raw('SUM(total_price) as total_revenue'))
-            ->groupBy('status')
+        $period = $request->get('period', 'daily');
+
+        $groupBy = match($period) {
+            'monthly' => DB::raw('DATE_FORMAT(created_at, "%Y-%m") as period'),
+            'yearly'  => DB::raw('YEAR(created_at) as period'),
+            default   => DB::raw('DATE(created_at) as period'),
+        };
+
+        $revenue = Transaction::select(
+                $groupBy,
+                DB::raw('SUM(total_payment) as total_revenue'),
+                DB::raw('COUNT(*) as total_transaction')
+            )
+            ->where('status', 'success')
+            ->groupBy('period')
+            ->orderBy('period', 'desc')
             ->get();
 
         return $this->successResponse($revenue, 'Revenue berhasil diambil');
+    }
+
+    public function summary(){
+        $data = [
+            'total_revenue'     => Transaction::where('status', 'success')->sum('total_payment'),
+            'total_booking'     => Booking::whereNotIn('status', ['cancelled'])->count(),
+            'total_customer'    => User::where('role', 'user')->count(),
+            'total_barber'      => Barber::where('is_active', true)->count(),
+            'low_stock_product' => Product::where('stock', '<=', 10)->count(),
+        ];
+
+        return $this->successResponse($data, 'Summary berhasil diambil');
     }
 }
