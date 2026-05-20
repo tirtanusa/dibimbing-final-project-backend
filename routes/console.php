@@ -9,4 +9,4 @@ Artisan::command('inspire', function () {
 })->purpose('Display an inspiring quote');
 
 
-Schedule::command('slots:generate')->dailyAt('00:01')->withoutOverlapping();
+Schedule::command('app:generate-daily-slots')->dailyAt('00:01')->withoutOverlapping();

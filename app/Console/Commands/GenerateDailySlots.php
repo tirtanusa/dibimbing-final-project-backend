@@ -6,7 +6,6 @@ use Illuminate\Console\Attributes\Description;
 use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
 use App\Models\Barber;
-use App\Http\Controllers\TimeSlotController;
 use App\Models\BarberSchedule;
 use App\Models\Service;
 use App\Models\TimeSlot;
