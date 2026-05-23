@@ -27,22 +27,21 @@ Route::prefix('auth')->group(function(){
 Route::middleware(['auth:sanctum', 'role:admin,user'])->group(function(){
     Route::middleware(['auth:sanctum', 'role:admin'])->group(function(){
         Route::get('users', [UserController::class, 'index']);
+        Route::post('users/add-user', [UserController::class, 'store']);
         Route::get('users/{id}', [UserController::class, 'show']);
         Route::delete('users/{id}', [UserController::class, 'destroy']);
-        Route::post('users', [UserController::class, 'store']);
     });
     Route::put('users/{id}', [UserController::class, 'update']);
 });
 
 //Barber Controller
-Route::get('barber', [BarberController::class, 'index']);
-Route::get('barber/{id}', [BarberController::class, 'show']);
-
 Route::middleware(['auth:sanctum', 'role:admin'])->group(function(){
-    Route::post('barber', [BarberController::class, 'store']);
+    Route::post('barber/add-barber', [BarberController::class, 'store']);
     Route::put('barber/{id}', [BarberController::class, 'update']);
     Route::delete('barber/{id}', [BarberController::class, 'destroy']);
 });
+Route::get('barber', [BarberController::class, 'index']);
+Route::get('barber/{id}', [BarberController::class, 'show']);
 
 //Barber Schedule
 Route::get('barber/{id}/schedule', [BarberScheduleController::class, 'index']);
@@ -50,8 +49,8 @@ Route::get('barber/{id}/schedule', [BarberScheduleController::class, 'index']);
 Route::prefix('barber/{id}')->group(function(){
     Route::middleware(['auth:sanctum', 'role:admin'])->group(function (){
         Route::post('schedule', [BarberScheduleController::class, 'store']);
-        Route::put('schedule/{id}', [BarberScheduleController::class, 'update']);
-        Route::delete('schedule/{id}', [BarberScheduleController::class, 'destroy']);
+        Route::put('schedule/{schedule_id}', [BarberScheduleController::class, 'update']);
+        Route::delete('schedule/{schedule_id}', [BarberScheduleController::class, 'destroy']);
     });
 });
 

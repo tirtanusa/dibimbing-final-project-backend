@@ -12,9 +12,12 @@ class BarberScheduleController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+    public function index(Request $request, string $id)
     {
         $schedules = BarberSchedule::paginate($request->get('limit', 10));
+        if($schedules->isEmpty()){
+            return $this->notFoundResponse('Data jadwal barber untuk barber ' . $id . ' tidak ditemukan');
+        }
         return $this->successResponse($schedules, 'Data jadwal barber berhasil diambil');
     }
 
@@ -49,23 +52,14 @@ class BarberScheduleController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        $schedule = BarberSchedule::findOrFail($id);
-        return $this->successResponse($schedule, 'Data jadwal barber berhasil diambil');
-    }
-
-    /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, string $id, string $schedule_id)
     {
-        $schedule = BarberSchedule::findOrFail($id);
+        $schedule = BarberSchedule::findOrFail($schedule_id);
         $validate = $request->validate([
             'barber_id' => 'required|exists:barbers,id',
-            'day_of_week' => 'required|integer|min:0|max:6|unique:barber_schedules,day_of_week,'.$id.',id,barber_id,'.$request->barber_id,
+            'day_of_week' => 'required|integer|min:0|max:6|unique:barber_schedules,day_of_week,'.$schedule_id.',id,barber_id,'.$request->barber_id,
             'start_time' => 'required|date_format:H:i',
             'end_time' => 'required|date_format:H:i|after:start_time',
             'is_active' => 'nullable|boolean'
@@ -91,9 +85,9 @@ class BarberScheduleController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(string $schedule_id)
     {
-        $schedule = BarberSchedule::findOrFail($id);
+        $schedule = BarberSchedule::findOrFail($schedule_id);
         $schedule->delete();
         return $this->successResponse(null, 'Data jadwal barber berhasil dihapus');
     }

@@ -31,13 +31,13 @@ class UserController extends Controller
     {
         //
         $validate = $request->validate([
-            'nama' => 'required|string',
+            'name' => 'required|string',
             'email' => 'required|string|email|unique:users,email',
             'password' => 'required|string|min:8|confirmed',
             'phone_number' => 'required|string',
             'role' => 'required|in:admin,user'
         ],[
-            'nama.required' => 'Nama wajib diisi',
+            'name.required' => 'Nama wajib diisi',
             'email.required' => 'Email wajib diisi',
             'email.email' => 'Email tidak valid',
             'email.unique' => 'Email sudah terdaftar',
@@ -50,7 +50,7 @@ class UserController extends Controller
         ]);
 
         $user = User::create([
-            'name' => $validate['nama'],
+            'name' => $validate['name'],
             'email' => $validate['email'],
             'password' => Hash::make($validate['password']),
             'phone_number' => $validate['phone_number'],
@@ -79,13 +79,14 @@ class UserController extends Controller
         $user = User::findOrFail($id);
 
         $validated = $request->validate([
-            'nama' => 'required|string|min:3',
+            'name' => 'required|string|min:3',
             'email' => 'required|string|email|unique:users,email,'.$id,
             'password' => 'nullable|string|min:8|confirmed',
             'phone_number' => 'required|string|max:20',
-            'role' => 'required|in:admin,user'
+            'role' => 'sometimes|in:admin,user'
         ],[
-            'nama.required' => 'Nama wajib diisi',
+            'name.required' => 'Nama wajib diisi',
+            'name.min' => 'Nama minimal 3 karakter',
             'email.required' => 'Email wajib diisi',
             'email.email' => 'Email tidak valid',
             'email.unique' => 'Email sudah terdaftar',
@@ -93,15 +94,14 @@ class UserController extends Controller
             'password.confirmed' => 'Password konfirmasi tidak cocok',
             'phone_number.required' => 'Nomor telepon wajib diisi',
             'phone_number.max' => 'Nomor telepon maksimal 20 karakter',
-            'role.required' => 'Role wajib diisi',
             'role.in' => 'Role tidak valid'
         ]);
 
         $updateData = [
-            'name' => $validated['nama'],
+            'name' => $validated['name'],
             'email' => $validated['email'],
             'phone_number' => $validated['phone_number'],
-            'role' => $validated['role'],
+            'role' => $validated['role'] ?? $user->role,
         ];
 
         if (!empty($validated['password'])) {

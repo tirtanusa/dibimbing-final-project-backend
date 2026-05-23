@@ -4,6 +4,8 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use App\Models\BarberSchedule;
+use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class BarberScheduleSeeder extends Seeder
 {

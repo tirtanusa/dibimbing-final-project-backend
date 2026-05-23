@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
             BarberSeeder::class,
             ServiceSeeder::class,
             ProductSeeder::class,
+            BarberScheduleSeeder::class,
         ]);
 
         Artisan::call('app:generate-daily-slots');

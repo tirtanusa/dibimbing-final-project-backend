@@ -13,11 +13,11 @@ use Carbon\Carbon;
 class TimeSlotController extends Controller
 {
     use ApiResponse;
-    public function index(Request $request){
-        $slots = TimeSlot::where('barber_id', $request->barber_id)
+    public function index(Request $request, string $id){
+        $slots = TimeSlot::where('barber_id', $id)
             ->where('date', $request->date)
             ->when($request->status, fn($q) => $q->where('status', $request->status))
-            ->paginate($request->get('limit', 10));
+            ->paginate($request->get('limit', 5));
             
         return $this->successResponse($slots, 'Data time slot berhasil diambil');
     }
@@ -40,8 +40,9 @@ class TimeSlotController extends Controller
         return $this->successResponse($slot, 'Slot waktu berhasil di-unblock');
     }
 
-    public function generate(Request $request, string $barberId, string $date)
+    public function generate(Request $request, string $barberId)
     {
+        $date = $request->get('date', Carbon::today()->toDateString());
         $dayOfWeek = date('w', strtotime($date));
 
         $schedule = BarberSchedule::where('barber_id', $barberId)
