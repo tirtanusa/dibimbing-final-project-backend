@@ -1,0 +1,4489 @@
+{
+  "info": {
+    "_postman_id": "72363077-113b-4ccf-9642-87b04e1fbe1b",
+    "name": "Barber-shop-app",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "28418665"
+  },
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if(pm.response.code == 200){\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.environment.set(\"token\", jsonData.data.access_token);\r",
+                  "}"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"email\" : \"admin@barber.com\",\r\n    \"password\": \"password123\" \r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/auth/login",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "Unauthorized Response",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"email\" : \"admin@barbershop.id\",\r\n    \"password\": \"password321\" \r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{url}}/auth/login",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "login"
+                  ]
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Host",
+                  "value": "127.0.0.1:8000"
+                },
+                {
+                  "key": "Connection",
+                  "value": "close"
+                },
+                {
+                  "key": "X-Powered-By",
+                  "value": "PHP/8.4.16"
+                },
+                {
+                  "key": "Cache-Control",
+                  "value": "no-cache, private"
+                },
+                {
+                  "key": "Date",
+                  "value": "Sat, 23 May 2026 07:03:25 GMT"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"message\": \"Invalid email or password\"\n}"
+            },
+            {
+              "name": "Success Response",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"email\" : \"admin@barber.com\",\r\n    \"password\": \"password123\" \r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{url}}/auth/login",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "login"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Host",
+                  "value": "127.0.0.1:8000"
+                },
+                {
+                  "key": "Connection",
+                  "value": "close"
+                },
+                {
+                  "key": "X-Powered-By",
+                  "value": "PHP/8.4.16"
+                },
+                {
+                  "key": "Cache-Control",
+                  "value": "no-cache, private"
+                },
+                {
+                  "key": "Date",
+                  "value": "Sat, 23 May 2026 07:36:36 GMT"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"success\": true,\n    \"message\": \"Login successful\",\n    \"data\": {\n        \"access_token\": \"1|ON6sF50et4hdToY0ttRAAUKv9uJoarKruu5GuopB54c820b7\",\n        \"token_type\": \"Bearer\"\n    }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Logout",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if(pm.response.code === 200){\r",
+                  "    pm.environtment.set(\"token\", '')\r",
+                  "}"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{url}}/auth/logout",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "auth",
+                "logout"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "Success Response",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{url}}/auth/logout",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "logout"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Host",
+                  "value": "127.0.0.1:8000"
+                },
+                {
+                  "key": "Connection",
+                  "value": "close"
+                },
+                {
+                  "key": "X-Powered-By",
+                  "value": "PHP/8.4.16"
+                },
+                {
+                  "key": "Cache-Control",
+                  "value": "no-cache, private"
+                },
+                {
+                  "key": "Date",
+                  "value": "Sat, 23 May 2026 07:39:05 GMT"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"success\": true,\n    \"message\": \"Logout successful\",\n    \"data\": null\n}"
+            },
+            {
+              "name": "Unauthorized Response",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{url}}/auth/logout",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "logout"
+                  ]
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Host",
+                  "value": "127.0.0.1:8000"
+                },
+                {
+                  "key": "Connection",
+                  "value": "close"
+                },
+                {
+                  "key": "X-Powered-By",
+                  "value": "PHP/8.4.16"
+                },
+                {
+                  "key": "Cache-Control",
+                  "value": "no-cache, private"
+                },
+                {
+                  "key": "Date",
+                  "value": "Sat, 23 May 2026 07:39:22 GMT"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"success\": false,\n    \"message\": \"Anda belum login\",\n    \"data\": null\n}"
+            }
+          ]
+        },
+        {
+          "name": "Register",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "const timestamp = new Date().getTime();\r",
+                  "const randomEmail = `user${timestamp}@test.com`;\r",
+                  "const name = `user${timestamp}`;\r",
+                  "\r",
+                  "pm.environment.set(\"dynamic_email\", randomEmail);\r",
+                  "pm.environment.set(\"dynamic_name\", name);\r",
+                  "pm.environment.set(\"dynamic_password\", \"password123\");\r",
+                  "\r",
+                  "console.log(\"Generate Email: \"+randomEmail);\r",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if(pm.response.code == 201){\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.environment.set(\"token\", jsonData.data.access_token);\r",
+                  "}"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\" : \"YOUR_NAME\",\r\n    \"email\" : \"tirtanusa@exmpl.com\",\r\n    \"password\": \"password123\",\r\n    \"password_confirmation\": \"password123\",\r\n    \"phone_number\" : \"0812812812\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/auth/register",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "auth",
+                "register"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "Unprocessable Content",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"email\" : {{dynamic_email}},\r\n    \"name\" : {{dynamic_name}},\r\n    \"password\": {{dynamic_password}},\r\n    \"password_confirmation\": {{dynamic_password}},\r\n    \"phone_number\" : \"08121212\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{url}}/auth/register",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "register"
+                  ]
+                }
+              },
+              "status": "Unprocessable Content",
+              "code": 422,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Host",
+                  "value": "127.0.0.1:8000"
+                },
+                {
+                  "key": "Connection",
+                  "value": "close"
+                },
+                {
+                  "key": "X-Powered-By",
+                  "value": "PHP/8.4.16"
+                },
+                {
+                  "key": "Cache-Control",
+                  "value": "no-cache, private"
+                },
+                {
+                  "key": "Date",
+                  "value": "Sat, 23 May 2026 07:50:07 GMT"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"message\": \"Name is required (and 3 more errors)\",\n    \"errors\": {\n        \"name\": [\n            \"Name is required\"\n        ],\n        \"email\": [\n            \"Email is required\"\n        ],\n        \"password\": [\n            \"Password is required\"\n        ],\n        \"phone_number\": [\n            \"The phone number field is required.\"\n        ]\n    }\n}"
+            },
+            {
+              "name": "Account Created Successfully",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"name\" : \"YOUR_NAME\",\r\n    \"email\" : \"tirtanusa@exmpl.com\",\r\n    \"password\": \"password123\",\r\n    \"password_confirmation\": \"password123\",\r\n    \"phone_number\" : \"0812812812\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{url}}/auth/register",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "register"
+                  ]
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Host",
+                  "value": "127.0.0.1:8000"
+                },
+                {
+                  "key": "Connection",
+                  "value": "close"
+                },
+                {
+                  "key": "X-Powered-By",
+                  "value": "PHP/8.4.16"
+                },
+                {
+                  "key": "Cache-Control",
+                  "value": "no-cache, private"
+                },
+                {
+                  "key": "Date",
+                  "value": "Sat, 23 May 2026 07:53:03 GMT"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"success\": true,\n    \"message\": \"User registered successfully\",\n    \"data\": {\n        \"name\": \"YOUR_NAME\",\n        \"email\": \"tirtanusa@exmpl.com\",\n        \"phone_number\": \"0812812812\",\n        \"role\": \"user\",\n        \"updated_at\": \"2026-05-23T07:53:03.000000Z\",\n        \"created_at\": \"2026-05-23T07:53:03.000000Z\",\n        \"id\": 12\n    }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Me",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if(pm.response.code === 200){\r",
+                  "    pm.environment.set(\"user_id\", pm.response.json().data.id)\r",
+                  "}"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/auth/me",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "auth",
+                "me"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "Unauthorized Response",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{url}}/auth/me",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "me"
+                  ]
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Host",
+                  "value": "127.0.0.1:8000"
+                },
+                {
+                  "key": "Connection",
+                  "value": "close"
+                },
+                {
+                  "key": "X-Powered-By",
+                  "value": "PHP/8.4.16"
+                },
+                {
+                  "key": "Cache-Control",
+                  "value": "no-cache, private"
+                },
+                {
+                  "key": "Date",
+                  "value": "Sat, 23 May 2026 07:54:40 GMT"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"success\": false,\n    \"message\": \"Anda belum login\",\n    \"data\": null\n}"
+            },
+            {
+              "name": "Success Response",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{url}}/auth/me",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "me"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Host",
+                  "value": "127.0.0.1:8000"
+                },
+                {
+                  "key": "Connection",
+                  "value": "close"
+                },
+                {
+                  "key": "X-Powered-By",
+                  "value": "PHP/8.4.16"
+                },
+                {
+                  "key": "Cache-Control",
+                  "value": "no-cache, private"
+                },
+                {
+                  "key": "Date",
+                  "value": "Sat, 23 May 2026 07:55:05 GMT"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"success\": true,\n    \"message\": \"User profile retrieved successfully\",\n    \"data\": {\n        \"id\": 1,\n        \"name\": \"Admin Barber\",\n        \"email\": \"admin@barber.com\",\n        \"email_verified_at\": null,\n        \"role\": \"admin\",\n        \"phone_number\": \"081234567890\",\n        \"created_at\": \"2026-05-21T10:58:38.000000Z\",\n        \"updated_at\": \"2026-05-21T10:58:38.000000Z\",\n        \"deleted_at\": null\n    }\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "User",
+      "item": [
+        {
+          "name": "Role : Admin , User",
+          "item": [
+            {
+              "name": "Update",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n        \"name\": \"Admin Barber\",\r\n        \"email\": \"admin@barber.com\",\r\n        \"phone_number\": \"081234567890\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{url}}/users/{{user_id}}",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "users",
+                    "{{user_id}}"
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "name": "Unprocessable Response",
+                  "originalRequest": {
+                    "method": "PUT",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json",
+                        "type": "text"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n        \"name\": \"Admin Barber\",\r\n        \"email\": \"admin@barber.com\",\r\n        \"phone_number\": \"081234567890\"\r\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{url}}/users/{{user_id}}",
+                      "host": [
+                        "{{url}}"
+                      ],
+                      "path": [
+                        "users",
+                        "{{user_id}}"
+                      ]
+                    }
+                  },
+                  "status": "Unprocessable Content",
+                  "code": 422,
+                  "_postman_previewlanguage": null,
+                  "header": [
+                    {
+                      "key": "Host",
+                      "value": "127.0.0.1:8000"
+                    },
+                    {
+                      "key": "Connection",
+                      "value": "close"
+                    },
+                    {
+                      "key": "X-Powered-By",
+                      "value": "PHP/8.4.16"
+                    },
+                    {
+                      "key": "Cache-Control",
+                      "value": "no-cache, private"
+                    },
+                    {
+                      "key": "Date",
+                      "value": "Sat, 23 May 2026 08:09:35 GMT"
+                    },
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    },
+                    {
+                      "key": "Access-Control-Allow-Origin",
+                      "value": "*"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "{\n    \"message\": \"Nama wajib diisi (and 2 more errors)\",\n    \"errors\": {\n        \"name\": [\n            \"Nama wajib diisi\"\n        ],\n        \"email\": [\n            \"Email wajib diisi\"\n        ],\n        \"phone_number\": [\n            \"Nomor telepon wajib diisi\"\n        ]\n    }\n}"
+                },
+                {
+                  "name": "Success Response",
+                  "originalRequest": {
+                    "method": "PUT",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json",
+                        "type": "text"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n        \"name\": \"Admin Barber\",\r\n        \"email\": \"admin@barber.com\",\r\n        \"phone_number\": \"081234567890\"\r\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{url}}/users/{{user_id}}",
+                      "host": [
+                        "{{url}}"
+                      ],
+                      "path": [
+                        "users",
+                        "{{user_id}}"
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": null,
+                  "header": [
+                    {
+                      "key": "Host",
+                      "value": "127.0.0.1:8000"
+                    },
+                    {
+                      "key": "Connection",
+                      "value": "close"
+                    },
+                    {
+                      "key": "X-Powered-By",
+                      "value": "PHP/8.4.16"
+                    },
+                    {
+                      "key": "Cache-Control",
+                      "value": "no-cache, private"
+                    },
+                    {
+                      "key": "Date",
+                      "value": "Sat, 23 May 2026 08:10:20 GMT"
+                    },
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    },
+                    {
+                      "key": "Access-Control-Allow-Origin",
+                      "value": "*"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "{\n    \"success\": true,\n    \"message\": \"User berhasil diupdate\",\n    \"data\": {\n        \"id\": 1,\n        \"name\": \"Admin Barber\",\n        \"email\": \"admin@barber.com\",\n        \"email_verified_at\": null,\n        \"role\": \"admin\",\n        \"phone_number\": \"081234567890\",\n        \"created_at\": \"2026-05-21T10:58:38.000000Z\",\n        \"updated_at\": \"2026-05-21T10:58:38.000000Z\",\n        \"deleted_at\": null\n    }\n}"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Role : Admin",
+          "item": [
+            {
+              "name": "List of users",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{url}}/users",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "users"
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "name": "Success Response",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json",
+                        "type": "text"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{url}}/users",
+                      "host": [
+                        "{{url}}"
+                      ],
+                      "path": [
+                        "users"
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": null,
+                  "header": [
+                    {
+                      "key": "Host",
+                      "value": "127.0.0.1:8000"
+                    },
+                    {
+                      "key": "Connection",
+                      "value": "close"
+                    },
+                    {
+                      "key": "X-Powered-By",
+                      "value": "PHP/8.4.16"
+                    },
+                    {
+                      "key": "Cache-Control",
+                      "value": "no-cache, private"
+                    },
+                    {
+                      "key": "Date",
+                      "value": "Sat, 23 May 2026 08:15:14 GMT"
+                    },
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    },
+                    {
+                      "key": "Access-Control-Allow-Origin",
+                      "value": "*"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "{\n    \"success\": true,\n    \"message\": \"Daftar user berhasil diambil\",\n    \"data\": {\n        \"current_page\": 1,\n        \"data\": [\n            {\n                \"id\": 1,\n                \"name\": \"Admin Barber\",\n                \"email\": \"admin@barber.com\",\n                \"email_verified_at\": null,\n                \"role\": \"admin\",\n                \"phone_number\": \"081234567890\",\n                \"created_at\": \"2026-05-21T10:58:38.000000Z\",\n                \"updated_at\": \"2026-05-21T10:58:38.000000Z\",\n                \"deleted_at\": null\n            },\n            {\n                \"id\": 2,\n                \"name\": \"Budi Santoso\",\n                \"email\": \"budi@example.com\",\n                \"email_verified_at\": null,\n                \"role\": \"user\",\n                \"phone_number\": \"081111111111\",\n                \"created_at\": \"2026-05-21T10:58:38.000000Z\",\n                \"updated_at\": \"2026-05-21T10:58:38.000000Z\",\n                \"deleted_at\": null\n            },\n            {\n                \"id\": 3,\n                \"name\": \"Andi Wijaya\",\n                \"email\": \"andi@example.com\",\n                \"email_verified_at\": null,\n                \"role\": \"user\",\n                \"phone_number\": \"081222222222\",\n                \"created_at\": \"2026-05-21T10:58:39.000000Z\",\n                \"updated_at\": \"2026-05-21T10:58:39.000000Z\",\n                \"deleted_at\": null\n            },\n            {\n                \"id\": 4,\n                \"name\": \"Reza Pratama\",\n                \"email\": \"reza@example.com\",\n                \"email_verified_at\": null,\n                \"role\": \"user\",\n                \"phone_number\": \"081333333333\",\n                \"created_at\": \"2026-05-21T10:58:39.000000Z\",\n                \"updated_at\": \"2026-05-21T10:58:39.000000Z\",\n                \"deleted_at\": null\n            },\n            {\n                \"id\": 5,\n                \"name\": \"Doni Kusuma\",\n                \"email\": \"doni@example.com\",\n                \"email_verified_at\": null,\n                \"role\": \"user\",\n                \"phone_number\": \"081444444444\",\n                \"created_at\": \"2026-05-21T10:58:39.000000Z\",\n                \"updated_at\": \"2026-05-21T10:58:39.000000Z\",\n                \"deleted_at\": null\n            },\n            {\n                \"id\": 6,\n                \"name\": \"Fajar Nugroho\",\n                \"email\": \"fajar@example.com\",\n                \"email_verified_at\": null,\n                \"role\": \"user\",\n                \"phone_number\": \"081555555555\",\n                \"created_at\": \"2026-05-21T10:58:39.000000Z\",\n                \"updated_at\": \"2026-05-21T10:58:39.000000Z\",\n                \"deleted_at\": null\n            },\n            {\n                \"id\": 7,\n                \"name\": \"Hendra Saputra\",\n                \"email\": \"hendra@example.com\",\n                \"email_verified_at\": null,\n                \"role\": \"user\",\n                \"phone_number\": \"081666666666\",\n                \"created_at\": \"2026-05-21T10:58:40.000000Z\",\n                \"updated_at\": \"2026-05-21T10:58:40.000000Z\",\n                \"deleted_at\": null\n            },\n            {\n                \"id\": 8,\n                \"name\": \"Irfan Maulana\",\n                \"email\": \"irfan@example.com\",\n                \"email_verified_at\": null,\n                \"role\": \"user\",\n                \"phone_number\": \"081777777777\",\n                \"created_at\": \"2026-05-21T10:58:40.000000Z\",\n                \"updated_at\": \"2026-05-21T10:58:40.000000Z\",\n                \"deleted_at\": null\n            },\n            {\n                \"id\": 9,\n                \"name\": \"Johan Setiawan\",\n                \"email\": \"johan@example.com\",\n                \"email_verified_at\": null,\n                \"role\": \"user\",\n                \"phone_number\": \"081888888888\",\n                \"created_at\": \"2026-05-21T10:58:40.000000Z\",\n                \"updated_at\": \"2026-05-21T10:58:40.000000Z\",\n                \"deleted_at\": null\n            },\n            {\n                \"id\": 10,\n                \"name\": \"Kevin Halim\",\n                \"email\": \"kevin@example.com\",\n                \"email_verified_at\": null,\n                \"role\": \"user\",\n                \"phone_number\": \"081999999999\",\n                \"created_at\": \"2026-05-21T10:58:40.000000Z\",\n                \"updated_at\": \"2026-05-21T10:58:40.000000Z\",\n                \"deleted_at\": null\n            }\n        ],\n        \"first_page_url\": \"http://127.0.0.1:8000/api/users?page=1\",\n        \"from\": 1,\n        \"last_page\": 2,\n        \"last_page_url\": \"http://127.0.0.1:8000/api/users?page=2\",\n        \"links\": [\n            {\n                \"url\": null,\n                \"label\": \"&laquo; Previous\",\n                \"page\": null,\n                \"active\": false\n            },\n            {\n                \"url\": \"http://127.0.0.1:8000/api/users?page=1\",\n                \"label\": \"1\",\n                \"page\": 1,\n                \"active\": true\n            },\n            {\n                \"url\": \"http://127.0.0.1:8000/api/users?page=2\",\n                \"label\": \"2\",\n                \"page\": 2,\n                \"active\": false\n            },\n            {\n                \"url\": \"http://127.0.0.1:8000/api/users?page=2\",\n                \"label\": \"Next &raquo;\",\n                \"page\": 2,\n                \"active\": false\n            }\n        ],\n        \"next_page_url\": \"http://127.0.0.1:8000/api/users?page=2\",\n        \"path\": \"http://127.0.0.1:8000/api/users\",\n        \"per_page\": 10,\n        \"prev_page_url\": null,\n        \"to\": 10,\n        \"total\": 12\n    }\n}"
+                }
+              ]
+            },
+            {
+              "name": "Delete a user",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "{{url}}/users/{{id}}",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "users",
+                    "{{id}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get a user",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{url}}/users/{{user_id}}",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "users",
+                    "{{user_id}}"
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "name": "Success Response",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json",
+                        "type": "text"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{url}}/users/{{user_id}}",
+                      "host": [
+                        "{{url}}"
+                      ],
+                      "path": [
+                        "users",
+                        "{{user_id}}"
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": null,
+                  "header": [
+                    {
+                      "key": "Host",
+                      "value": "127.0.0.1:8000"
+                    },
+                    {
+                      "key": "Connection",
+                      "value": "close"
+                    },
+                    {
+                      "key": "X-Powered-By",
+                      "value": "PHP/8.4.16"
+                    },
+                    {
+                      "key": "Cache-Control",
+                      "value": "no-cache, private"
+                    },
+                    {
+                      "key": "Date",
+                      "value": "Sat, 23 May 2026 08:19:53 GMT"
+                    },
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    },
+                    {
+                      "key": "Access-Control-Allow-Origin",
+                      "value": "*"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "{\n    \"success\": true,\n    \"message\": \"User berhasil diambil\",\n    \"data\": {\n        \"id\": 1,\n        \"name\": \"Admin Barber\",\n        \"email\": \"admin@barber.com\",\n        \"email_verified_at\": null,\n        \"role\": \"admin\",\n        \"phone_number\": \"081234567890\",\n        \"created_at\": \"2026-05-21T10:58:38.000000Z\",\n        \"updated_at\": \"2026-05-21T10:58:38.000000Z\",\n        \"deleted_at\": null\n    }\n}"
+                }
+              ]
+            },
+            {
+              "name": "Store User Data",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"name\" : \"{{dynamic_name}}\",\r\n    \"email\" : \"{{dynamic_email}}\",\r\n    \"password\" : \"password123\",\r\n    \"password_confirmation\" : \"password123\",\r\n    \"phone_number\" : \"01212018219\",\r\n    \"role\" : \"user\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{url}}/users/add-user",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "users",
+                    "add-user"
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "name": "Success Response",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json",
+                        "type": "text"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n    \"name\" : \"{{dynamic_name}}\",\r\n    \"email\" : \"{{dynamic_email}}\",\r\n    \"password\" : \"password123\",\r\n    \"password_confirmation\" : \"password123\",\r\n    \"phone_number\" : \"01212018219\",\r\n    \"role\" : \"user\"\r\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{url}}/users/add-user",
+                      "host": [
+                        "{{url}}"
+                      ],
+                      "path": [
+                        "users",
+                        "add-user"
+                      ]
+                    }
+                  },
+                  "status": "Created",
+                  "code": 201,
+                  "_postman_previewlanguage": null,
+                  "header": [
+                    {
+                      "key": "Host",
+                      "value": "127.0.0.1:8000"
+                    },
+                    {
+                      "key": "Connection",
+                      "value": "close"
+                    },
+                    {
+                      "key": "X-Powered-By",
+                      "value": "PHP/8.4.16"
+                    },
+                    {
+                      "key": "Cache-Control",
+                      "value": "no-cache, private"
+                    },
+                    {
+                      "key": "Date",
+                      "value": "Sat, 23 May 2026 08:27:37 GMT"
+                    },
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    },
+                    {
+                      "key": "Access-Control-Allow-Origin",
+                      "value": "*"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "{\n    \"success\": true,\n    \"message\": \"User berhasil dibuat\",\n    \"data\": {\n        \"name\": \"user1779522782512\",\n        \"email\": \"user1779522782512@test.com\",\n        \"phone_number\": \"01212018219\",\n        \"role\": \"user\",\n        \"updated_at\": \"2026-05-23T08:27:37.000000Z\",\n        \"created_at\": \"2026-05-23T08:27:37.000000Z\",\n        \"id\": 13\n    }\n}"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Barber",
+      "item": [
+        {
+          "name": "Role : Admin",
+          "item": [
+            {
+              "name": "Add new barber",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"name\" : \"Muhammad Faisal\",\r\n    \"bio\" : \"Expert dalam Fade Style dan Pijat\",\r\n    \"rating\" : 0,\r\n    \"is_active\": true\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{url}}/barber/add-barber",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "barber",
+                    "add-barber"
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "name": "Barber created successfuly",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json",
+                        "type": "text"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n    \"name\" : \"Muhammad Faisal\",\r\n    \"bio\" : \"Expert dalam Fade Style dan Pijat\",\r\n    \"rating\" : 0,\r\n    \"is_active\": true\r\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{url}}/barber/add-barber",
+                      "host": [
+                        "{{url}}"
+                      ],
+                      "path": [
+                        "barber",
+                        "add-barber"
+                      ]
+                    }
+                  },
+                  "status": "Created",
+                  "code": 201,
+                  "_postman_previewlanguage": null,
+                  "header": [
+                    {
+                      "key": "Host",
+                      "value": "127.0.0.1:8000"
+                    },
+                    {
+                      "key": "Connection",
+                      "value": "close"
+                    },
+                    {
+                      "key": "X-Powered-By",
+                      "value": "PHP/8.4.16"
+                    },
+                    {
+                      "key": "Cache-Control",
+                      "value": "no-cache, private"
+                    },
+                    {
+                      "key": "Date",
+                      "value": "Sat, 23 May 2026 08:33:30 GMT"
+                    },
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    },
+                    {
+                      "key": "Access-Control-Allow-Origin",
+                      "value": "*"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "{\n    \"success\": true,\n    \"message\": \"Data barber berhasil dibuat\",\n    \"data\": {\n        \"name\": \"Muhammad Faisal\",\n        \"bio\": \"Expert dalam Fade Style dan Pijat\",\n        \"rating\": \"0.00\",\n        \"is_active\": true,\n        \"updated_at\": \"2026-05-23T08:33:30.000000Z\",\n        \"created_at\": \"2026-05-23T08:33:30.000000Z\",\n        \"id\": 5\n    }\n}"
+                }
+              ]
+            },
+            {
+              "name": "Delete a barber",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{url}}/barber/{{id}}",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "barber",
+                    "{{id}}"
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "name": "Success Response",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json",
+                        "type": "text"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{url}}/barber/{{id}}",
+                      "host": [
+                        "{{url}}"
+                      ],
+                      "path": [
+                        "barber",
+                        "{{id}}"
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": null,
+                  "header": [
+                    {
+                      "key": "Host",
+                      "value": "127.0.0.1:8000"
+                    },
+                    {
+                      "key": "Connection",
+                      "value": "close"
+                    },
+                    {
+                      "key": "X-Powered-By",
+                      "value": "PHP/8.4.16"
+                    },
+                    {
+                      "key": "Cache-Control",
+                      "value": "no-cache, private"
+                    },
+                    {
+                      "key": "Date",
+                      "value": "Sat, 23 May 2026 08:38:15 GMT"
+                    },
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    },
+                    {
+                      "key": "Access-Control-Allow-Origin",
+                      "value": "*"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "{\n    \"success\": true,\n    \"message\": \"Data barber berhasil diambil\",\n    \"data\": {\n        \"id\": 5,\n        \"name\": \"Muhammad Faisal\",\n        \"bio\": \"Expert dalam Fade Style dan Pijat\",\n        \"rating\": \"0.00\",\n        \"is_active\": true,\n        \"created_at\": \"2026-05-23T08:33:30.000000Z\",\n        \"updated_at\": \"2026-05-23T08:33:30.000000Z\",\n        \"deleted_at\": null\n    }\n}"
+                }
+              ]
+            },
+            {
+              "name": "Update barber data",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"name\" : \"Muhammad Faisal\",\r\n    \"bio\" : \"Expert dalam Fade Style dan Pijat\",\r\n    \"rating\" : 0,\r\n    \"is_active\": true\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{url}}/barber/{{id}}",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "barber",
+                    "{{id}}"
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "name": "Success Response",
+                  "originalRequest": {
+                    "method": "PUT",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json",
+                        "type": "text"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n    \"name\" : \"Muhammad Faisal\",\r\n    \"bio\" : \"Expert dalam Fade Style dan Pijat\",\r\n    \"rating\" : 0,\r\n    \"is_active\": true\r\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{url}}/barber/{{id}}",
+                      "host": [
+                        "{{url}}"
+                      ],
+                      "path": [
+                        "barber",
+                        "{{id}}"
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": null,
+                  "header": [
+                    {
+                      "key": "Host",
+                      "value": "127.0.0.1:8000"
+                    },
+                    {
+                      "key": "Connection",
+                      "value": "close"
+                    },
+                    {
+                      "key": "X-Powered-By",
+                      "value": "PHP/8.4.16"
+                    },
+                    {
+                      "key": "Cache-Control",
+                      "value": "no-cache, private"
+                    },
+                    {
+                      "key": "Date",
+                      "value": "Sat, 23 May 2026 08:39:48 GMT"
+                    },
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    },
+                    {
+                      "key": "Access-Control-Allow-Origin",
+                      "value": "*"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "{\n    \"success\": true,\n    \"message\": \"Data barber berhasil diupdate\",\n    \"data\": {\n        \"id\": 4,\n        \"name\": \"Muhammad Faisal\",\n        \"bio\": \"Expert dalam Fade Style dan Pijat\",\n        \"rating\": \"0.00\",\n        \"is_active\": true,\n        \"created_at\": \"2026-05-21T10:58:41.000000Z\",\n        \"updated_at\": \"2026-05-23T08:39:48.000000Z\",\n        \"deleted_at\": null\n    }\n}"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "List of Barber",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{url}}/barber",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "barber"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "Success Response",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{url}}/barber",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "barber"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Host",
+                  "value": "127.0.0.1:8000"
+                },
+                {
+                  "key": "Connection",
+                  "value": "close"
+                },
+                {
+                  "key": "X-Powered-By",
+                  "value": "PHP/8.4.16"
+                },
+                {
+                  "key": "Cache-Control",
+                  "value": "no-cache, private"
+                },
+                {
+                  "key": "Date",
+                  "value": "Sat, 23 May 2026 08:29:07 GMT"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"success\": true,\n    \"message\": \"Data barber berhasil diambil\",\n    \"data\": {\n        \"current_page\": 1,\n        \"data\": [\n            {\n                \"id\": 1,\n                \"name\": \"Ahmad Fauzi\",\n                \"bio\": \"Barber berpengalaman 5 tahun, spesialis fade dan undercut.\",\n                \"rating\": \"4.80\",\n                \"is_active\": true,\n                \"created_at\": \"2026-05-21T10:58:41.000000Z\",\n                \"updated_at\": \"2026-05-21T10:58:41.000000Z\",\n                \"deleted_at\": null\n            },\n            {\n                \"id\": 2,\n                \"name\": \"Rizky Ramadhan\",\n                \"bio\": \"Ahli dalam teknik pompadour dan quiff modern.\",\n                \"rating\": \"4.50\",\n                \"is_active\": true,\n                \"created_at\": \"2026-05-21T10:58:41.000000Z\",\n                \"updated_at\": \"2026-05-21T10:58:41.000000Z\",\n                \"deleted_at\": null\n            },\n            {\n                \"id\": 3,\n                \"name\": \"Dimas Ardiansyah\",\n                \"bio\": \"Spesialis cukur jenggot dan perawatan rambut pria.\",\n                \"rating\": \"4.20\",\n                \"is_active\": true,\n                \"created_at\": \"2026-05-21T10:58:41.000000Z\",\n                \"updated_at\": \"2026-05-21T10:58:41.000000Z\",\n                \"deleted_at\": null\n            },\n            {\n                \"id\": 4,\n                \"name\": \"Bagas Prasetyo\",\n                \"bio\": \"Barber muda dengan keahlian gaya rambut modern dan klasik.\",\n                \"rating\": \"3.90\",\n                \"is_active\": false,\n                \"created_at\": \"2026-05-21T10:58:41.000000Z\",\n                \"updated_at\": \"2026-05-21T10:58:41.000000Z\",\n                \"deleted_at\": null\n            }\n        ],\n        \"first_page_url\": \"http://127.0.0.1:8000/api/barber?page=1\",\n        \"from\": 1,\n        \"last_page\": 1,\n        \"last_page_url\": \"http://127.0.0.1:8000/api/barber?page=1\",\n        \"links\": [\n            {\n                \"url\": null,\n                \"label\": \"&laquo; Previous\",\n                \"page\": null,\n                \"active\": false\n            },\n            {\n                \"url\": \"http://127.0.0.1:8000/api/barber?page=1\",\n                \"label\": \"1\",\n                \"page\": 1,\n                \"active\": true\n            },\n            {\n                \"url\": null,\n                \"label\": \"Next &raquo;\",\n                \"page\": null,\n                \"active\": false\n            }\n        ],\n        \"next_page_url\": null,\n        \"path\": \"http://127.0.0.1:8000/api/barber\",\n        \"per_page\": 10,\n        \"prev_page_url\": null,\n        \"to\": 4,\n        \"total\": 4\n    }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get a Barber (detail)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{url}}/barber/{{id}}",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "barber",
+                "{{id}}"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "Success Response",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{url}}/barber/{{id}}",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "barber",
+                    "{{id}}"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Host",
+                  "value": "127.0.0.1:8000"
+                },
+                {
+                  "key": "Connection",
+                  "value": "close"
+                },
+                {
+                  "key": "X-Powered-By",
+                  "value": "PHP/8.4.16"
+                },
+                {
+                  "key": "Cache-Control",
+                  "value": "no-cache, private"
+                },
+                {
+                  "key": "Date",
+                  "value": "Sat, 23 May 2026 08:30:15 GMT"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"success\": true,\n    \"message\": \"Data barber berhasil diambil\",\n    \"data\": {\n        \"id\": 1,\n        \"name\": \"Ahmad Fauzi\",\n        \"bio\": \"Barber berpengalaman 5 tahun, spesialis fade dan undercut.\",\n        \"rating\": \"4.80\",\n        \"is_active\": true,\n        \"created_at\": \"2026-05-21T10:58:41.000000Z\",\n        \"updated_at\": \"2026-05-21T10:58:41.000000Z\",\n        \"deleted_at\": null\n    }\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Barber Schedule",
+      "item": [
+        {
+          "name": "Role : Admin",
+          "item": [
+            {
+              "name": "Post barber's schedule",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{url}}/barber/{{id}}/schedule",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "barber",
+                    "{{id}}",
+                    "schedule"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Update Barber's Schedule",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{url}}/barber/{{id}}/schedule/{{schedule_id}}",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "barber",
+                    "{{id}}",
+                    "schedule",
+                    "{{schedule_id}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Delete barber's schedule",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{url}}/barber/{{id}}/schedule/{{schedule_id}}",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "barber",
+                    "{{id}}",
+                    "schedule",
+                    "{{schedule_id}}"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Get barber's schedule",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\" : \"Muhammad Faisal\",\r\n    \"bio\" : \"Expert dalam Fade Style dan Pijat\",\r\n    \"rating\" : 0,\r\n    \"is_active\": true\r\n}"
+            },
+            "url": {
+              "raw": "{{url}}/barber/{{id}}/schedule",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "barber",
+                "{{id}}",
+                "schedule"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "Success Response",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"name\" : \"Muhammad Faisal\",\r\n    \"bio\" : \"Expert dalam Fade Style dan Pijat\",\r\n    \"rating\" : 0,\r\n    \"is_active\": true\r\n}"
+                },
+                "url": {
+                  "raw": "{{url}}/barber/{{id}}/schedule",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "barber",
+                    "{{id}}",
+                    "schedule"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Host",
+                  "value": "127.0.0.1:8000"
+                },
+                {
+                  "key": "Connection",
+                  "value": "close"
+                },
+                {
+                  "key": "X-Powered-By",
+                  "value": "PHP/8.4.16"
+                },
+                {
+                  "key": "Cache-Control",
+                  "value": "no-cache, private"
+                },
+                {
+                  "key": "Date",
+                  "value": "Sat, 23 May 2026 09:00:46 GMT"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"success\": true,\n    \"message\": \"Data jadwal barber berhasil diambil\",\n    \"data\": {\n        \"current_page\": 1,\n        \"data\": [\n            {\n                \"id\": 7,\n                \"barber_id\": 2,\n                \"day_of_week\": 1,\n                \"start_time\": \"10:00:00\",\n                \"end_time\": \"18:00:00\",\n                \"is_active\": true,\n                \"created_at\": \"2026-05-23T09:00:23.000000Z\",\n                \"updated_at\": \"2026-05-23T09:00:23.000000Z\"\n            },\n            {\n                \"id\": 8,\n                \"barber_id\": 2,\n                \"day_of_week\": 2,\n                \"start_time\": \"10:00:00\",\n                \"end_time\": \"18:00:00\",\n                \"is_active\": true,\n                \"created_at\": \"2026-05-23T09:00:23.000000Z\",\n                \"updated_at\": \"2026-05-23T09:00:23.000000Z\"\n            },\n            {\n                \"id\": 9,\n                \"barber_id\": 2,\n                \"day_of_week\": 3,\n                \"start_time\": \"10:00:00\",\n                \"end_time\": \"18:00:00\",\n                \"is_active\": true,\n                \"created_at\": \"2026-05-23T09:00:23.000000Z\",\n                \"updated_at\": \"2026-05-23T09:00:23.000000Z\"\n            },\n            {\n                \"id\": 10,\n                \"barber_id\": 2,\n                \"day_of_week\": 4,\n                \"start_time\": \"10:00:00\",\n                \"end_time\": \"18:00:00\",\n                \"is_active\": true,\n                \"created_at\": \"2026-05-23T09:00:23.000000Z\",\n                \"updated_at\": \"2026-05-23T09:00:23.000000Z\"\n            },\n            {\n                \"id\": 11,\n                \"barber_id\": 2,\n                \"day_of_week\": 5,\n                \"start_time\": \"10:00:00\",\n                \"end_time\": \"18:00:00\",\n                \"is_active\": true,\n                \"created_at\": \"2026-05-23T09:00:23.000000Z\",\n                \"updated_at\": \"2026-05-23T09:00:23.000000Z\"\n            }\n        ],\n        \"first_page_url\": \"http://127.0.0.1:8000/api/barber/2/schedule?page=1\",\n        \"from\": 1,\n        \"last_page\": 1,\n        \"last_page_url\": \"http://127.0.0.1:8000/api/barber/2/schedule?page=1\",\n        \"links\": [\n            {\n                \"url\": null,\n                \"label\": \"&laquo; Previous\",\n                \"page\": null,\n                \"active\": false\n            },\n            {\n                \"url\": \"http://127.0.0.1:8000/api/barber/2/schedule?page=1\",\n                \"label\": \"1\",\n                \"page\": 1,\n                \"active\": true\n            },\n            {\n                \"url\": null,\n                \"label\": \"Next &raquo;\",\n                \"page\": null,\n                \"active\": false\n            }\n        ],\n        \"next_page_url\": null,\n        \"path\": \"http://127.0.0.1:8000/api/barber/2/schedule\",\n        \"per_page\": 10,\n        \"prev_page_url\": null,\n        \"to\": 5,\n        \"total\": 5\n    }\n}"
+            }
+          ]
+        },
+        {
+          "name": "New Request",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{url}}/barber/schedule/{{id}}",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "barber",
+                "schedule",
+                "{{id}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Time Slot",
+      "item": [
+        {
+          "name": "Role : Admin",
+          "item": [
+            {
+              "name": "Generate time slots for barber",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{url}}/barber/{{barber_id}}/slots/generate",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "barber",
+                    "{{barber_id}}",
+                    "slots",
+                    "generate"
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "name": "Generate time slots for barber",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json",
+                        "type": "text"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{url}}/barber/{{barber_id}}/slots/generate",
+                      "host": [
+                        "{{url}}"
+                      ],
+                      "path": [
+                        "barber",
+                        "{{barber_id}}",
+                        "slots",
+                        "generate"
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": null,
+                  "header": [
+                    {
+                      "key": "Host",
+                      "value": "127.0.0.1:8000"
+                    },
+                    {
+                      "key": "Connection",
+                      "value": "close"
+                    },
+                    {
+                      "key": "X-Powered-By",
+                      "value": "PHP/8.4.16"
+                    },
+                    {
+                      "key": "Cache-Control",
+                      "value": "no-cache, private"
+                    },
+                    {
+                      "key": "Date",
+                      "value": "Sat, 23 May 2026 09:49:30 GMT"
+                    },
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    },
+                    {
+                      "key": "Access-Control-Allow-Origin",
+                      "value": "*"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "{\n    \"success\": true,\n    \"message\": \"Slot waktu berhasil di-generate\",\n    \"data\": null\n}"
+                }
+              ]
+            },
+            {
+              "name": "Block slots",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{url}}/slots/{{id}}/block",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "slots",
+                    "{{id}}",
+                    "block"
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "name": "Success Response",
+                  "originalRequest": {
+                    "method": "PATCH",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json",
+                        "type": "text"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{url}}/slots/{{id}}/block",
+                      "host": [
+                        "{{url}}"
+                      ],
+                      "path": [
+                        "slots",
+                        "{{id}}",
+                        "block"
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": null,
+                  "header": [
+                    {
+                      "key": "Host",
+                      "value": "127.0.0.1:8000"
+                    },
+                    {
+                      "key": "Connection",
+                      "value": "close"
+                    },
+                    {
+                      "key": "X-Powered-By",
+                      "value": "PHP/8.4.16"
+                    },
+                    {
+                      "key": "Cache-Control",
+                      "value": "no-cache, private"
+                    },
+                    {
+                      "key": "Date",
+                      "value": "Sat, 23 May 2026 09:57:08 GMT"
+                    },
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    },
+                    {
+                      "key": "Access-Control-Allow-Origin",
+                      "value": "*"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "{\n    \"success\": true,\n    \"message\": \"Slot waktu berhasil di-block\",\n    \"data\": {\n        \"id\": 1,\n        \"barber_id\": 3,\n        \"date\": \"2026-05-23T17:00:00.000000Z\",\n        \"start_time\": \"08:00:00\",\n        \"end_time\": \"08:20:00\",\n        \"status\": \"blocked\",\n        \"booking_id\": null,\n        \"created_at\": \"2026-05-23T09:00:23.000000Z\",\n        \"updated_at\": \"2026-05-23T09:57:08.000000Z\",\n        \"deleted_at\": null\n    }\n}"
+                }
+              ]
+            },
+            {
+              "name": "Unblock slots",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{url}}/slots/{{id}}/unblock",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "slots",
+                    "{{id}}",
+                    "unblock"
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "name": "Success Response",
+                  "originalRequest": {
+                    "method": "PATCH",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json",
+                        "type": "text"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{url}}/slots/{{id}}/block",
+                      "host": [
+                        "{{url}}"
+                      ],
+                      "path": [
+                        "slots",
+                        "{{id}}",
+                        "block"
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": null,
+                  "header": [
+                    {
+                      "key": "Host",
+                      "value": "127.0.0.1:8000"
+                    },
+                    {
+                      "key": "Connection",
+                      "value": "close"
+                    },
+                    {
+                      "key": "X-Powered-By",
+                      "value": "PHP/8.4.16"
+                    },
+                    {
+                      "key": "Cache-Control",
+                      "value": "no-cache, private"
+                    },
+                    {
+                      "key": "Date",
+                      "value": "Sat, 23 May 2026 09:57:08 GMT"
+                    },
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    },
+                    {
+                      "key": "Access-Control-Allow-Origin",
+                      "value": "*"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "{\n    \"success\": true,\n    \"message\": \"Slot waktu berhasil di-block\",\n    \"data\": {\n        \"id\": 1,\n        \"barber_id\": 3,\n        \"date\": \"2026-05-23T17:00:00.000000Z\",\n        \"start_time\": \"08:00:00\",\n        \"end_time\": \"08:20:00\",\n        \"status\": \"blocked\",\n        \"booking_id\": null,\n        \"created_at\": \"2026-05-23T09:00:23.000000Z\",\n        \"updated_at\": \"2026-05-23T09:57:08.000000Z\",\n        \"deleted_at\": null\n    }\n}"
+                },
+                {
+                  "name": "Success Response",
+                  "originalRequest": {
+                    "method": "PATCH",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json",
+                        "type": "text"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{url}}/slots/{{id}}/unblock",
+                      "host": [
+                        "{{url}}"
+                      ],
+                      "path": [
+                        "slots",
+                        "{{id}}",
+                        "unblock"
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": null,
+                  "header": [
+                    {
+                      "key": "Host",
+                      "value": "127.0.0.1:8000"
+                    },
+                    {
+                      "key": "Connection",
+                      "value": "close"
+                    },
+                    {
+                      "key": "X-Powered-By",
+                      "value": "PHP/8.4.16"
+                    },
+                    {
+                      "key": "Cache-Control",
+                      "value": "no-cache, private"
+                    },
+                    {
+                      "key": "Date",
+                      "value": "Sat, 23 May 2026 09:57:48 GMT"
+                    },
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    },
+                    {
+                      "key": "Access-Control-Allow-Origin",
+                      "value": "*"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "{\n    \"success\": true,\n    \"message\": \"Slot waktu berhasil di-unblock\",\n    \"data\": {\n        \"id\": 1,\n        \"barber_id\": 3,\n        \"date\": \"2026-05-23T17:00:00.000000Z\",\n        \"start_time\": \"08:00:00\",\n        \"end_time\": \"08:20:00\",\n        \"status\": \"available\",\n        \"booking_id\": null,\n        \"created_at\": \"2026-05-23T09:00:23.000000Z\",\n        \"updated_at\": \"2026-05-23T09:57:48.000000Z\",\n        \"deleted_at\": null\n    }\n}"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Check barber's time slot",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{url}}/barber/{{id}}/slots?date=2026-05-23",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "barber",
+                "{{id}}",
+                "slots"
+              ],
+              "query": [
+                {
+                  "key": "date",
+                  "value": "2026-05-23"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "Check barber's time slot",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{url}}/barber/{{id}}/slots?date=2026-05-23",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "barber",
+                    "{{id}}",
+                    "slots"
+                  ],
+                  "query": [
+                    {
+                      "key": "date",
+                      "value": "2026-05-23"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Host",
+                  "value": "127.0.0.1:8000"
+                },
+                {
+                  "key": "Connection",
+                  "value": "close"
+                },
+                {
+                  "key": "X-Powered-By",
+                  "value": "PHP/8.4.16"
+                },
+                {
+                  "key": "Cache-Control",
+                  "value": "no-cache, private"
+                },
+                {
+                  "key": "Date",
+                  "value": "Sat, 23 May 2026 09:54:01 GMT"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"success\": true,\n    \"message\": \"Data time slot berhasil diambil\",\n    \"data\": {\n        \"current_page\": 1,\n        \"data\": [\n            {\n                \"id\": 25,\n                \"barber_id\": 3,\n                \"date\": \"2026-05-22T17:00:00.000000Z\",\n                \"start_time\": \"08:00:00\",\n                \"end_time\": \"08:20:00\",\n                \"status\": \"available\",\n                \"booking_id\": null,\n                \"created_at\": \"2026-05-23T09:49:30.000000Z\",\n                \"updated_at\": \"2026-05-23T09:49:30.000000Z\",\n                \"deleted_at\": null\n            },\n            {\n                \"id\": 26,\n                \"barber_id\": 3,\n                \"date\": \"2026-05-22T17:00:00.000000Z\",\n                \"start_time\": \"08:20:00\",\n                \"end_time\": \"08:40:00\",\n                \"status\": \"available\",\n                \"booking_id\": null,\n                \"created_at\": \"2026-05-23T09:49:30.000000Z\",\n                \"updated_at\": \"2026-05-23T09:49:30.000000Z\",\n                \"deleted_at\": null\n            },\n            {\n                \"id\": 27,\n                \"barber_id\": 3,\n                \"date\": \"2026-05-22T17:00:00.000000Z\",\n                \"start_time\": \"08:40:00\",\n                \"end_time\": \"09:00:00\",\n                \"status\": \"available\",\n                \"booking_id\": null,\n                \"created_at\": \"2026-05-23T09:49:30.000000Z\",\n                \"updated_at\": \"2026-05-23T09:49:30.000000Z\",\n                \"deleted_at\": null\n            },\n            {\n                \"id\": 28,\n                \"barber_id\": 3,\n                \"date\": \"2026-05-22T17:00:00.000000Z\",\n                \"start_time\": \"09:00:00\",\n                \"end_time\": \"09:20:00\",\n                \"status\": \"available\",\n                \"booking_id\": null,\n                \"created_at\": \"2026-05-23T09:49:30.000000Z\",\n                \"updated_at\": \"2026-05-23T09:49:30.000000Z\",\n                \"deleted_at\": null\n            },\n            {\n                \"id\": 29,\n                \"barber_id\": 3,\n                \"date\": \"2026-05-22T17:00:00.000000Z\",\n                \"start_time\": \"09:20:00\",\n                \"end_time\": \"09:40:00\",\n                \"status\": \"available\",\n                \"booking_id\": null,\n                \"created_at\": \"2026-05-23T09:49:30.000000Z\",\n                \"updated_at\": \"2026-05-23T09:49:30.000000Z\",\n                \"deleted_at\": null\n            }\n        ],\n        \"first_page_url\": \"http://127.0.0.1:8000/api/barber/3/slots?page=1\",\n        \"from\": 1,\n        \"last_page\": 5,\n        \"last_page_url\": \"http://127.0.0.1:8000/api/barber/3/slots?page=5\",\n        \"links\": [\n            {\n                \"url\": null,\n                \"label\": \"&laquo; Previous\",\n                \"page\": null,\n                \"active\": false\n            },\n            {\n                \"url\": \"http://127.0.0.1:8000/api/barber/3/slots?page=1\",\n                \"label\": \"1\",\n                \"page\": 1,\n                \"active\": true\n            },\n            {\n                \"url\": \"http://127.0.0.1:8000/api/barber/3/slots?page=2\",\n                \"label\": \"2\",\n                \"page\": 2,\n                \"active\": false\n            },\n            {\n                \"url\": \"http://127.0.0.1:8000/api/barber/3/slots?page=3\",\n                \"label\": \"3\",\n                \"page\": 3,\n                \"active\": false\n            },\n            {\n                \"url\": \"http://127.0.0.1:8000/api/barber/3/slots?page=4\",\n                \"label\": \"4\",\n                \"page\": 4,\n                \"active\": false\n            },\n            {\n                \"url\": \"http://127.0.0.1:8000/api/barber/3/slots?page=5\",\n                \"label\": \"5\",\n                \"page\": 5,\n                \"active\": false\n            },\n            {\n                \"url\": \"http://127.0.0.1:8000/api/barber/3/slots?page=2\",\n                \"label\": \"Next &raquo;\",\n                \"page\": 2,\n                \"active\": false\n            }\n        ],\n        \"next_page_url\": \"http://127.0.0.1:8000/api/barber/3/slots?page=2\",\n        \"path\": \"http://127.0.0.1:8000/api/barber/3/slots\",\n        \"per_page\": 5,\n        \"prev_page_url\": null,\n        \"to\": 5,\n        \"total\": 24\n    }\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Service",
+      "item": [
+        {
+          "name": "Role : Admin",
+          "item": [
+            {
+              "name": "Create a new Service",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"name\" : \"Potong Jenggot Lebat\",\r\n    \"description\" : \"Memotong jenggot yang lebat\",\r\n    \"price\" : 10000,\r\n    \"duration_minutes\": 30\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{url}}/services",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "services"
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "name": "Created Successfuly",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json",
+                        "type": "text"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n    \"name\" : \"Potong Jenggot Lebat\",\r\n    \"description\" : \"Memotong jenggot yang lebat\",\r\n    \"price\" : 10000,\r\n    \"duration_minutes\": 30\r\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{url}}/services",
+                      "host": [
+                        "{{url}}"
+                      ],
+                      "path": [
+                        "services"
+                      ]
+                    }
+                  },
+                  "status": "Created",
+                  "code": 201,
+                  "_postman_previewlanguage": null,
+                  "header": [
+                    {
+                      "key": "Host",
+                      "value": "127.0.0.1:8000"
+                    },
+                    {
+                      "key": "Connection",
+                      "value": "close"
+                    },
+                    {
+                      "key": "X-Powered-By",
+                      "value": "PHP/8.4.16"
+                    },
+                    {
+                      "key": "Cache-Control",
+                      "value": "no-cache, private"
+                    },
+                    {
+                      "key": "Date",
+                      "value": "Sat, 23 May 2026 10:02:52 GMT"
+                    },
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    },
+                    {
+                      "key": "Access-Control-Allow-Origin",
+                      "value": "*"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "{\n    \"success\": true,\n    \"message\": \"Data service berhasil dibuat\",\n    \"data\": {\n        \"name\": \"Potong Jenggot Lebat\",\n        \"description\": \"Memotong jenggot yang lebat\",\n        \"price\": \"10000.00\",\n        \"duration_minutes\": 30,\n        \"updated_at\": \"2026-05-23T10:02:52.000000Z\",\n        \"created_at\": \"2026-05-23T10:02:52.000000Z\",\n        \"id\": 7\n    }\n}"
+                }
+              ]
+            },
+            {
+              "name": "Update Service",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"name\" : \"Potong Jenggot Lebat\",\r\n    \"description\" : \"Memotong yang lebat\",\r\n    \"price\" : 15000,\r\n    \"duration_minutes\": 30\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{url}}/services/{{id}}",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "services",
+                    "{{id}}"
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "name": "Change success",
+                  "originalRequest": {
+                    "method": "PUT",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json",
+                        "type": "text"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n    \"name\" : \"Potong Jenggot Lebat\",\r\n    \"description\" : \"Memotong yang lebat\",\r\n    \"price\" : 15000,\r\n    \"duration_minutes\": 30\r\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{url}}/services/{{id}}",
+                      "host": [
+                        "{{url}}"
+                      ],
+                      "path": [
+                        "services",
+                        "{{id}}"
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": null,
+                  "header": [
+                    {
+                      "key": "Host",
+                      "value": "127.0.0.1:8000"
+                    },
+                    {
+                      "key": "Connection",
+                      "value": "close"
+                    },
+                    {
+                      "key": "X-Powered-By",
+                      "value": "PHP/8.4.16"
+                    },
+                    {
+                      "key": "Cache-Control",
+                      "value": "no-cache, private"
+                    },
+                    {
+                      "key": "Date",
+                      "value": "Sat, 23 May 2026 10:04:50 GMT"
+                    },
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    },
+                    {
+                      "key": "Access-Control-Allow-Origin",
+                      "value": "*"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "{\n    \"success\": true,\n    \"message\": \"Data service berhasil diupdate\",\n    \"data\": {\n        \"id\": 7,\n        \"name\": \"Potong Jenggot Lebat\",\n        \"description\": \"Memotong yang lebat\",\n        \"price\": \"15000.00\",\n        \"duration_minutes\": 30,\n        \"created_at\": \"2026-05-23T10:02:52.000000Z\",\n        \"updated_at\": \"2026-05-23T10:04:50.000000Z\",\n        \"deleted_at\": null\n    }\n}"
+                }
+              ]
+            },
+            {
+              "name": "Delete service",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{url}}/services/{{id}}",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "services",
+                    "{{id}}"
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "name": "Success Response",
+                  "originalRequest": {
+                    "method": "DELETE",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json",
+                        "type": "text"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{url}}/services/{{id}}",
+                      "host": [
+                        "{{url}}"
+                      ],
+                      "path": [
+                        "services",
+                        "{{id}}"
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": null,
+                  "header": [
+                    {
+                      "key": "Host",
+                      "value": "127.0.0.1:8000"
+                    },
+                    {
+                      "key": "Connection",
+                      "value": "close"
+                    },
+                    {
+                      "key": "X-Powered-By",
+                      "value": "PHP/8.4.16"
+                    },
+                    {
+                      "key": "Cache-Control",
+                      "value": "no-cache, private"
+                    },
+                    {
+                      "key": "Date",
+                      "value": "Sat, 23 May 2026 10:05:51 GMT"
+                    },
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    },
+                    {
+                      "key": "Access-Control-Allow-Origin",
+                      "value": "*"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "{\n    \"success\": true,\n    \"message\": \"Data service berhasil dihapus\",\n    \"data\": null\n}"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Fetch Service list",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{url}}/services",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "services"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "Success Response",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{url}}/services",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "services"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Host",
+                  "value": "127.0.0.1:8000"
+                },
+                {
+                  "key": "Connection",
+                  "value": "close"
+                },
+                {
+                  "key": "X-Powered-By",
+                  "value": "PHP/8.4.16"
+                },
+                {
+                  "key": "Cache-Control",
+                  "value": "no-cache, private"
+                },
+                {
+                  "key": "Date",
+                  "value": "Sat, 23 May 2026 09:59:39 GMT"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"success\": true,\n    \"message\": \"Data service berhasil diambil\",\n    \"data\": {\n        \"current_page\": 1,\n        \"data\": [\n            {\n                \"id\": 1,\n                \"name\": \"Potong Rambut\",\n                \"description\": \"Potong rambut standar sesuai keinginan pelanggan.\",\n                \"price\": \"35000.00\",\n                \"duration_minutes\": 30,\n                \"created_at\": \"2026-05-23T09:00:23.000000Z\",\n                \"updated_at\": \"2026-05-23T09:00:23.000000Z\",\n                \"deleted_at\": null\n            },\n            {\n                \"id\": 2,\n                \"name\": \"Potong + Cuci\",\n                \"description\": \"Potong rambut dilanjutkan dengan keramas menggunakan shampoo premium.\",\n                \"price\": \"50000.00\",\n                \"duration_minutes\": 45,\n                \"created_at\": \"2026-05-23T09:00:23.000000Z\",\n                \"updated_at\": \"2026-05-23T09:00:23.000000Z\",\n                \"deleted_at\": null\n            },\n            {\n                \"id\": 3,\n                \"name\": \"Cukur Jenggot\",\n                \"description\": \"Cukur dan rapikan jenggot menggunakan pisau cukur profesional.\",\n                \"price\": \"25000.00\",\n                \"duration_minutes\": 20,\n                \"created_at\": \"2026-05-23T09:00:23.000000Z\",\n                \"updated_at\": \"2026-05-23T09:00:23.000000Z\",\n                \"deleted_at\": null\n            },\n            {\n                \"id\": 4,\n                \"name\": \"Potong + Cukur Jenggot\",\n                \"description\": \"Paket lengkap potong rambut dan cukur jenggot.\",\n                \"price\": \"55000.00\",\n                \"duration_minutes\": 60,\n                \"created_at\": \"2026-05-23T09:00:23.000000Z\",\n                \"updated_at\": \"2026-05-23T09:00:23.000000Z\",\n                \"deleted_at\": null\n            },\n            {\n                \"id\": 5,\n                \"name\": \"Hair Coloring\",\n                \"description\": \"Pewarnaan rambut dengan berbagai pilihan warna.\",\n                \"price\": \"150000.00\",\n                \"duration_minutes\": 90,\n                \"created_at\": \"2026-05-23T09:00:23.000000Z\",\n                \"updated_at\": \"2026-05-23T09:00:23.000000Z\",\n                \"deleted_at\": null\n            },\n            {\n                \"id\": 6,\n                \"name\": \"Creambath\",\n                \"description\": \"Perawatan rambut dengan cream khusus untuk menutrisi rambut.\",\n                \"price\": \"75000.00\",\n                \"duration_minutes\": 60,\n                \"created_at\": \"2026-05-23T09:00:23.000000Z\",\n                \"updated_at\": \"2026-05-23T09:00:23.000000Z\",\n                \"deleted_at\": null\n            }\n        ],\n        \"first_page_url\": \"http://127.0.0.1:8000/api/services?page=1\",\n        \"from\": 1,\n        \"last_page\": 1,\n        \"last_page_url\": \"http://127.0.0.1:8000/api/services?page=1\",\n        \"links\": [\n            {\n                \"url\": null,\n                \"label\": \"&laquo; Previous\",\n                \"page\": null,\n                \"active\": false\n            },\n            {\n                \"url\": \"http://127.0.0.1:8000/api/services?page=1\",\n                \"label\": \"1\",\n                \"page\": 1,\n                \"active\": true\n            },\n            {\n                \"url\": null,\n                \"label\": \"Next &raquo;\",\n                \"page\": null,\n                \"active\": false\n            }\n        ],\n        \"next_page_url\": null,\n        \"path\": \"http://127.0.0.1:8000/api/services\",\n        \"per_page\": 10,\n        \"prev_page_url\": null,\n        \"to\": 6,\n        \"total\": 6\n    }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get services detail",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{url}}/services/{{id}}",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "services",
+                "{{id}}"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "Success Response",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{url}}/services/{{id}}",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "services",
+                    "{{id}}"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Host",
+                  "value": "127.0.0.1:8000"
+                },
+                {
+                  "key": "Connection",
+                  "value": "close"
+                },
+                {
+                  "key": "X-Powered-By",
+                  "value": "PHP/8.4.16"
+                },
+                {
+                  "key": "Cache-Control",
+                  "value": "no-cache, private"
+                },
+                {
+                  "key": "Date",
+                  "value": "Sat, 23 May 2026 10:00:31 GMT"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"success\": true,\n    \"message\": \"Data service berhasil diambil\",\n    \"data\": {\n        \"id\": 1,\n        \"name\": \"Potong Rambut\",\n        \"description\": \"Potong rambut standar sesuai keinginan pelanggan.\",\n        \"price\": \"35000.00\",\n        \"duration_minutes\": 30,\n        \"created_at\": \"2026-05-23T09:00:23.000000Z\",\n        \"updated_at\": \"2026-05-23T09:00:23.000000Z\",\n        \"deleted_at\": null\n    }\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Booking",
+      "item": [
+        {
+          "name": "Role : Admin , User",
+          "item": [
+            {
+              "name": "Create a Booking",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{url}}/bookings",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "bookings"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Role : Admin",
+          "item": [
+            {
+              "name": "Get all bookings",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{url}}/bookings",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "bookings"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Change booking status",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"status\" : \"\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{url}}/bookings/{{booking_id}}/status",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "bookings",
+                    "{{booking_id}}",
+                    "status"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Check user's booking",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{url}}/bookings/my",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "bookings",
+                    "my"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get booking's detail",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{url}}/bookings/{{booking_id}}",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "bookings",
+                    "{{booking_id}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Cancel booking",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"status\" : \"cancelled\"\r\n}"
+                },
+                "url": {
+                  "raw": "{{url}}/bookings/{{booking_id}}/cancel",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "bookings",
+                    "{{booking_id}}",
+                    "cancel"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Product",
+      "item": [
+        {
+          "name": "Admin",
+          "item": [
+            {
+              "name": "Create a Product",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"name\": \"Pomade Mahal\",\r\n    \"description\": \"Pomade ini cuma buat orang kaya\",\r\n    \"price\": \"9000000.00\",\r\n    \"stock\": 2,\r\n    \"category\": \"pomade\",\r\n    \"status\": \"available\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{url}}/products",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "products"
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "name": "Product created",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json",
+                        "type": "text"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n    \"name\": \"Pomade Mahal\",\r\n    \"description\": \"Pomade ini cuma buat orang kaya\",\r\n    \"price\": \"9000000.00\",\r\n    \"stock\": 2,\r\n    \"category\": \"pomade\",\r\n    \"status\": \"available\"\r\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{url}}/products",
+                      "host": [
+                        "{{url}}"
+                      ],
+                      "path": [
+                        "products"
+                      ]
+                    }
+                  },
+                  "status": "Created",
+                  "code": 201,
+                  "_postman_previewlanguage": null,
+                  "header": [
+                    {
+                      "key": "Host",
+                      "value": "127.0.0.1:8000"
+                    },
+                    {
+                      "key": "Connection",
+                      "value": "close"
+                    },
+                    {
+                      "key": "X-Powered-By",
+                      "value": "PHP/8.4.16"
+                    },
+                    {
+                      "key": "Cache-Control",
+                      "value": "no-cache, private"
+                    },
+                    {
+                      "key": "Date",
+                      "value": "Sat, 23 May 2026 10:19:33 GMT"
+                    },
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    },
+                    {
+                      "key": "Access-Control-Allow-Origin",
+                      "value": "*"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "{\n    \"success\": true,\n    \"message\": \"Data produk berhasil dibuat\",\n    \"data\": {\n        \"name\": \"Pomade Mahal\",\n        \"description\": \"Pomade ini cuma buat orang kaya\",\n        \"price\": \"9000000.00\",\n        \"stock\": 2,\n        \"category\": \"pomade\",\n        \"status\": \"available\",\n        \"updated_at\": \"2026-05-23T10:19:33.000000Z\",\n        \"created_at\": \"2026-05-23T10:19:33.000000Z\",\n        \"id\": 7\n    }\n}"
+                }
+              ]
+            },
+            {
+              "name": "Edit Product",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"name\": \"Pomade Mahal\",\r\n    \"description\": \"Pomade ini cuma buat orang kaya\",\r\n    \"price\": \"9000000.00\",\r\n    \"stock\": 20,\r\n    \"category\": \"pomade\",\r\n    \"status\": \"available\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{url}}/products/{{id}}",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "products",
+                    "{{id}}"
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "name": "Success Response",
+                  "originalRequest": {
+                    "method": "PUT",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json",
+                        "type": "text"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n    \"name\": \"Pomade Mahal\",\r\n    \"description\": \"Pomade ini cuma buat orang kaya\",\r\n    \"price\": \"9000000.00\",\r\n    \"stock\": 20,\r\n    \"category\": \"pomade\",\r\n    \"status\": \"available\"\r\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{url}}/products/{{id}}",
+                      "host": [
+                        "{{url}}"
+                      ],
+                      "path": [
+                        "products",
+                        "{{id}}"
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": null,
+                  "header": [
+                    {
+                      "key": "Host",
+                      "value": "127.0.0.1:8000"
+                    },
+                    {
+                      "key": "Connection",
+                      "value": "close"
+                    },
+                    {
+                      "key": "X-Powered-By",
+                      "value": "PHP/8.4.16"
+                    },
+                    {
+                      "key": "Cache-Control",
+                      "value": "no-cache, private"
+                    },
+                    {
+                      "key": "Date",
+                      "value": "Sat, 23 May 2026 10:21:26 GMT"
+                    },
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    },
+                    {
+                      "key": "Access-Control-Allow-Origin",
+                      "value": "*"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "{\n    \"success\": true,\n    \"message\": \"Data produk berhasil diupdate\",\n    \"data\": {\n        \"id\": 7,\n        \"name\": \"Pomade Mahal\",\n        \"description\": \"Pomade ini cuma buat orang kaya\",\n        \"price\": \"9000000.00\",\n        \"stock\": 20,\n        \"category\": \"pomade\",\n        \"status\": \"available\",\n        \"created_at\": \"2026-05-23T10:19:33.000000Z\",\n        \"updated_at\": \"2026-05-23T10:21:26.000000Z\",\n        \"deleted_at\": null\n    }\n}"
+                }
+              ]
+            },
+            {
+              "name": "Update Stock",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"stock\": 20\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{url}}/products/{{id}}/stock",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "products",
+                    "{{id}}",
+                    "stock"
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "name": "Success modifying stock",
+                  "originalRequest": {
+                    "method": "PATCH",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json",
+                        "type": "text"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n    \"stock\": 20\r\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{url}}/products/{{id}}/stock",
+                      "host": [
+                        "{{url}}"
+                      ],
+                      "path": [
+                        "products",
+                        "{{id}}",
+                        "stock"
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": null,
+                  "header": [
+                    {
+                      "key": "Host",
+                      "value": "127.0.0.1:8000"
+                    },
+                    {
+                      "key": "Connection",
+                      "value": "close"
+                    },
+                    {
+                      "key": "X-Powered-By",
+                      "value": "PHP/8.4.16"
+                    },
+                    {
+                      "key": "Cache-Control",
+                      "value": "no-cache, private"
+                    },
+                    {
+                      "key": "Date",
+                      "value": "Sat, 23 May 2026 10:28:26 GMT"
+                    },
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    },
+                    {
+                      "key": "Access-Control-Allow-Origin",
+                      "value": "*"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "{\n    \"success\": true,\n    \"message\": \"Stok produk berhasil diupdate\",\n    \"data\": {\n        \"id\": 7,\n        \"name\": \"Pomade Mahal\",\n        \"description\": \"Pomade ini cuma buat orang kaya\",\n        \"price\": \"9000000.00\",\n        \"stock\": 20,\n        \"category\": \"pomade\",\n        \"status\": \"available\",\n        \"created_at\": \"2026-05-23T10:19:33.000000Z\",\n        \"updated_at\": \"2026-05-23T10:21:26.000000Z\",\n        \"deleted_at\": null\n    }\n}"
+                }
+              ]
+            },
+            {
+              "name": "Delete a Product",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{url}}/products/{{id}}",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "products",
+                    "{{id}}"
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "name": "Success Response",
+                  "originalRequest": {
+                    "method": "DELETE",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json",
+                        "type": "text"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{url}}/products/{{id}}",
+                      "host": [
+                        "{{url}}"
+                      ],
+                      "path": [
+                        "products",
+                        "{{id}}"
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": null,
+                  "header": [
+                    {
+                      "key": "Host",
+                      "value": "127.0.0.1:8000"
+                    },
+                    {
+                      "key": "Connection",
+                      "value": "close"
+                    },
+                    {
+                      "key": "X-Powered-By",
+                      "value": "PHP/8.4.16"
+                    },
+                    {
+                      "key": "Cache-Control",
+                      "value": "no-cache, private"
+                    },
+                    {
+                      "key": "Date",
+                      "value": "Sat, 23 May 2026 10:29:24 GMT"
+                    },
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    },
+                    {
+                      "key": "Access-Control-Allow-Origin",
+                      "value": "*"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "{\n    \"success\": true,\n    \"message\": \"Data produk berhasil dihapus\",\n    \"data\": null\n}"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Get list of all product",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{url}}/products",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "products"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "Success Response",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{url}}/products",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "products"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Host",
+                  "value": "127.0.0.1:8000"
+                },
+                {
+                  "key": "Connection",
+                  "value": "close"
+                },
+                {
+                  "key": "X-Powered-By",
+                  "value": "PHP/8.4.16"
+                },
+                {
+                  "key": "Cache-Control",
+                  "value": "no-cache, private"
+                },
+                {
+                  "key": "Date",
+                  "value": "Sat, 23 May 2026 10:16:34 GMT"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"success\": true,\n    \"message\": \"Data produk berhasil diambil\",\n    \"data\": {\n        \"current_page\": 1,\n        \"data\": [\n            {\n                \"id\": 1,\n                \"name\": \"Pomade Gatsby\",\n                \"description\": \"Pomade water-based dengan hold kuat dan shine tinggi.\",\n                \"price\": \"45000.00\",\n                \"stock\": 50,\n                \"category\": \"pomade\",\n                \"status\": \"available\",\n                \"created_at\": \"2026-05-23T09:00:23.000000Z\",\n                \"updated_at\": \"2026-05-23T09:00:23.000000Z\",\n                \"deleted_at\": null\n            },\n            {\n                \"id\": 2,\n                \"name\": \"Pomade Suavecito\",\n                \"description\": \"Pomade premium dengan aroma segar dan hold medium.\",\n                \"price\": \"120000.00\",\n                \"stock\": 20,\n                \"category\": \"pomade\",\n                \"status\": \"available\",\n                \"created_at\": \"2026-05-23T09:00:23.000000Z\",\n                \"updated_at\": \"2026-05-23T09:00:23.000000Z\",\n                \"deleted_at\": null\n            },\n            {\n                \"id\": 3,\n                \"name\": \"Shampoo Men Dove\",\n                \"description\": \"Shampoo khusus pria untuk rambut sehat dan bersih.\",\n                \"price\": \"25000.00\",\n                \"stock\": 40,\n                \"category\": \"shampo\",\n                \"status\": \"available\",\n                \"created_at\": \"2026-05-23T09:00:23.000000Z\",\n                \"updated_at\": \"2026-05-23T09:00:23.000000Z\",\n                \"deleted_at\": null\n            },\n            {\n                \"id\": 4,\n                \"name\": \"Conditioner Pantene\",\n                \"description\": \"Kondisioner untuk melembutkan dan menutrisi rambut.\",\n                \"price\": \"30000.00\",\n                \"stock\": 8,\n                \"category\": \"conditioner\",\n                \"status\": \"available\",\n                \"created_at\": \"2026-05-23T09:00:23.000000Z\",\n                \"updated_at\": \"2026-05-23T09:00:23.000000Z\",\n                \"deleted_at\": null\n            },\n            {\n                \"id\": 5,\n                \"name\": \"Hair Wax Brylcreem\",\n                \"description\": \"Wax rambut untuk styling sehari-hari dengan hold ringan.\",\n                \"price\": \"35000.00\",\n                \"stock\": 0,\n                \"category\": \"pomade\",\n                \"status\": \"out_of_stock\",\n                \"created_at\": \"2026-05-23T09:00:23.000000Z\",\n                \"updated_at\": \"2026-05-23T09:00:23.000000Z\",\n                \"deleted_at\": null\n            },\n            {\n                \"id\": 6,\n                \"name\": \"Beard Oil\",\n                \"description\": \"Minyak perawatan jenggot agar tetap lembut dan rapi.\",\n                \"price\": \"65000.00\",\n                \"stock\": 15,\n                \"category\": \"other\",\n                \"status\": \"available\",\n                \"created_at\": \"2026-05-23T09:00:23.000000Z\",\n                \"updated_at\": \"2026-05-23T09:00:23.000000Z\",\n                \"deleted_at\": null\n            }\n        ],\n        \"first_page_url\": \"http://127.0.0.1:8000/api/products?page=1\",\n        \"from\": 1,\n        \"last_page\": 1,\n        \"last_page_url\": \"http://127.0.0.1:8000/api/products?page=1\",\n        \"links\": [\n            {\n                \"url\": null,\n                \"label\": \"&laquo; Previous\",\n                \"page\": null,\n                \"active\": false\n            },\n            {\n                \"url\": \"http://127.0.0.1:8000/api/products?page=1\",\n                \"label\": \"1\",\n                \"page\": 1,\n                \"active\": true\n            },\n            {\n                \"url\": null,\n                \"label\": \"Next &raquo;\",\n                \"page\": null,\n                \"active\": false\n            }\n        ],\n        \"next_page_url\": null,\n        \"path\": \"http://127.0.0.1:8000/api/products\",\n        \"per_page\": 10,\n        \"prev_page_url\": null,\n        \"to\": 6,\n        \"total\": 6\n    }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Fetch a product",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{url}}/products/{{id}}",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "products",
+                "{{id}}"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "Success Response",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{url}}/products/{{id}}",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "products",
+                    "{{id}}"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Host",
+                  "value": "127.0.0.1:8000"
+                },
+                {
+                  "key": "Connection",
+                  "value": "close"
+                },
+                {
+                  "key": "X-Powered-By",
+                  "value": "PHP/8.4.16"
+                },
+                {
+                  "key": "Cache-Control",
+                  "value": "no-cache, private"
+                },
+                {
+                  "key": "Date",
+                  "value": "Sat, 23 May 2026 10:17:28 GMT"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"success\": true,\n    \"message\": \"Data produk berhasil diambil\",\n    \"data\": {\n        \"id\": 1,\n        \"name\": \"Pomade Gatsby\",\n        \"description\": \"Pomade water-based dengan hold kuat dan shine tinggi.\",\n        \"price\": \"45000.00\",\n        \"stock\": 50,\n        \"category\": \"pomade\",\n        \"status\": \"available\",\n        \"created_at\": \"2026-05-23T09:00:23.000000Z\",\n        \"updated_at\": \"2026-05-23T09:00:23.000000Z\",\n        \"deleted_at\": null\n    }\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Report",
+      "item": [
+        {
+          "name": "Role : Admin",
+          "item": [
+            {
+              "name": "Get business summary",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{url}}/reports/summary",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "reports",
+                    "summary"
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "name": "Success Response",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json",
+                        "type": "text"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{url}}/reports/summary",
+                      "host": [
+                        "{{url}}"
+                      ],
+                      "path": [
+                        "reports",
+                        "summary"
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": null,
+                  "header": [
+                    {
+                      "key": "Host",
+                      "value": "127.0.0.1:8000"
+                    },
+                    {
+                      "key": "Connection",
+                      "value": "close"
+                    },
+                    {
+                      "key": "X-Powered-By",
+                      "value": "PHP/8.4.16"
+                    },
+                    {
+                      "key": "Cache-Control",
+                      "value": "no-cache, private"
+                    },
+                    {
+                      "key": "Date",
+                      "value": "Sat, 23 May 2026 10:32:15 GMT"
+                    },
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    },
+                    {
+                      "key": "Access-Control-Allow-Origin",
+                      "value": "*"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "{\n    \"success\": true,\n    \"message\": \"Summary berhasil diambil\",\n    \"data\": {\n        \"total_revenue\": 0,\n        \"total_booking\": 0,\n        \"total_customer\": 10,\n        \"total_barber\": 3,\n        \"low_stock_product\": 2\n    }\n}"
+                }
+              ]
+            },
+            {
+              "name": "Get most popular service",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{url}}/reports/top-services",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "reports",
+                    "top-services"
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "name": "success response",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json",
+                        "type": "text"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{url}}/reports/top-services",
+                      "host": [
+                        "{{url}}"
+                      ],
+                      "path": [
+                        "reports",
+                        "top-services"
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": null,
+                  "header": [
+                    {
+                      "key": "Host",
+                      "value": "127.0.0.1:8000"
+                    },
+                    {
+                      "key": "Connection",
+                      "value": "close"
+                    },
+                    {
+                      "key": "X-Powered-By",
+                      "value": "PHP/8.4.16"
+                    },
+                    {
+                      "key": "Cache-Control",
+                      "value": "no-cache, private"
+                    },
+                    {
+                      "key": "Date",
+                      "value": "Sat, 23 May 2026 10:33:14 GMT"
+                    },
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    },
+                    {
+                      "key": "Access-Control-Allow-Origin",
+                      "value": "*"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "{\n    \"success\": true,\n    \"message\": \"Top service berhasil diambil\",\n    \"data\": []\n}"
+                }
+              ]
+            },
+            {
+              "name": "Get most popular products",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{url}}/reports/top-products",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "reports",
+                    "top-products"
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "name": "Get most popular products",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json",
+                        "type": "text"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{url}}/reports/top-products",
+                      "host": [
+                        "{{url}}"
+                      ],
+                      "path": [
+                        "reports",
+                        "top-products"
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": null,
+                  "header": [
+                    {
+                      "key": "Host",
+                      "value": "127.0.0.1:8000"
+                    },
+                    {
+                      "key": "Connection",
+                      "value": "close"
+                    },
+                    {
+                      "key": "X-Powered-By",
+                      "value": "PHP/8.4.16"
+                    },
+                    {
+                      "key": "Cache-Control",
+                      "value": "no-cache, private"
+                    },
+                    {
+                      "key": "Date",
+                      "value": "Sat, 23 May 2026 10:33:57 GMT"
+                    },
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    },
+                    {
+                      "key": "Access-Control-Allow-Origin",
+                      "value": "*"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "{\n    \"success\": true,\n    \"message\": \"Top produk berhasil diambil\",\n    \"data\": []\n}"
+                }
+              ]
+            },
+            {
+              "name": "Revenue",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{url}}/reports/revenue",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "reports",
+                    "revenue"
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "name": "Revenue",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json",
+                        "type": "text"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{url}}/reports/revenue",
+                      "host": [
+                        "{{url}}"
+                      ],
+                      "path": [
+                        "reports",
+                        "revenue"
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": null,
+                  "header": [
+                    {
+                      "key": "Host",
+                      "value": "127.0.0.1:8000"
+                    },
+                    {
+                      "key": "Connection",
+                      "value": "close"
+                    },
+                    {
+                      "key": "X-Powered-By",
+                      "value": "PHP/8.4.16"
+                    },
+                    {
+                      "key": "Cache-Control",
+                      "value": "no-cache, private"
+                    },
+                    {
+                      "key": "Date",
+                      "value": "Sat, 23 May 2026 10:34:46 GMT"
+                    },
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    },
+                    {
+                      "key": "Access-Control-Allow-Origin",
+                      "value": "*"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "{\n    \"success\": true,\n    \"message\": \"Revenue berhasil diambil\",\n    \"data\": []\n}"
+                }
+              ]
+            },
+            {
+              "name": "Get most popular barber",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{url}}/reports/top-barbers",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "reports",
+                    "top-barbers"
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "name": "Get most popular barber",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json",
+                        "type": "text"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{url}}/reports/top-barbers",
+                      "host": [
+                        "{{url}}"
+                      ],
+                      "path": [
+                        "reports",
+                        "top-barbers"
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": null,
+                  "header": [
+                    {
+                      "key": "Host",
+                      "value": "127.0.0.1:8000"
+                    },
+                    {
+                      "key": "Connection",
+                      "value": "close"
+                    },
+                    {
+                      "key": "X-Powered-By",
+                      "value": "PHP/8.4.16"
+                    },
+                    {
+                      "key": "Cache-Control",
+                      "value": "no-cache, private"
+                    },
+                    {
+                      "key": "Date",
+                      "value": "Sat, 23 May 2026 10:35:25 GMT"
+                    },
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    },
+                    {
+                      "key": "Access-Control-Allow-Origin",
+                      "value": "*"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "{\n    \"success\": true,\n    \"message\": \"Top barber berhasil diambil\",\n    \"data\": [\n        {\n            \"id\": 1,\n            \"name\": \"Ahmad Fauzi\",\n            \"rating\": \"4.80\",\n            \"total_booking\": 0\n        },\n        {\n            \"id\": 2,\n            \"name\": \"Rizky Ramadhan\",\n            \"rating\": \"4.50\",\n            \"total_booking\": 0\n        },\n        {\n            \"id\": 3,\n            \"name\": \"Dimas Ardiansyah\",\n            \"rating\": \"4.20\",\n            \"total_booking\": 0\n        }\n    ]\n}"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Get top rated barber",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{url}}/reports/top-rated-barber",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "reports",
+                "top-rated-barber"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "Success Response",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{url}}/reports/top-rated-barber",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "reports",
+                    "top-rated-barber"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Host",
+                  "value": "127.0.0.1:8000"
+                },
+                {
+                  "key": "Connection",
+                  "value": "close"
+                },
+                {
+                  "key": "X-Powered-By",
+                  "value": "PHP/8.4.16"
+                },
+                {
+                  "key": "Cache-Control",
+                  "value": "no-cache, private"
+                },
+                {
+                  "key": "Date",
+                  "value": "Sat, 23 May 2026 10:31:00 GMT"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"success\": true,\n    \"message\": \"Top barber berhasil diambil\",\n    \"data\": [\n        {\n            \"id\": 1,\n            \"name\": \"Ahmad Fauzi\",\n            \"rating\": \"4.80\"\n        },\n        {\n            \"id\": 2,\n            \"name\": \"Rizky Ramadhan\",\n            \"rating\": \"4.50\"\n        },\n        {\n            \"id\": 3,\n            \"name\": \"Dimas Ardiansyah\",\n            \"rating\": \"4.20\"\n        }\n    ]\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Transaction",
+      "item": [
+        {
+          "name": "Role : Admin",
+          "item": [
+            {
+              "name": "Fetch Transactions",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{url}}/transactions",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "transactions"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Update Status of a Transaction",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PATCH",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"status\" : \"completed\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{url}}/transactions/{{transaction_id}}/status",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "transactions",
+                    "{{transaction_id}}",
+                    "status"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Store a Transaction",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"user_id\": 2,\r\n  \"booking_id\": 1,\r\n  \"payment_method\": \"cash\",\r\n  \"items\": [\r\n    {\r\n      \"product_id\": 1,\r\n      \"quantity\": 2\r\n    },\r\n    {\r\n      \"product_id\": 3,\r\n      \"quantity\": 1\r\n    }\r\n  ]\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{url}}/transactions",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "transactions"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get transaction detail",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{url}}/transactions/{{transaction_id}}",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "transactions",
+                    "{{transaction_id}}"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Role : User",
+          "item": [
+            {
+              "name": "Get user's transactions history",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{url}}/transactions/my",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "transactions",
+                    "my"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get transaction detail",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{url}}/transactions/{{transaction_id}}",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "transactions",
+                    "{{transaction_id}}"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

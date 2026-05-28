@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Booking;
 use App\Traits\ApiResponse;
 use App\Models\TimeSlot;
+use App\Models\Service;
 use Illuminate\Support\Facades\DB;
 
 class BookingController extends Controller
@@ -67,19 +68,25 @@ class BookingController extends Controller
             ->exists();
 
         if ($conflict) {
-            return $this->errorResponse(null, 'Slot waktu tidak tersedia, barber sudah memiliki booking di waktu ini', 409);
+            return $this->errorResponse( 'Slot waktu tidak tersedia, barber sudah memiliki booking di waktu ini', 409);
         }
 
         $booking = DB::transaction(function() use ($validate) {
             $booking = Booking::create($validate + ['status' => 'pending']);
+            $service = Service::min('duration_minutes');
+            if (!$service) {
+                return $this->errorResponse(null, 'Tidak ada service yang tersedia', 404);
+            }
             
-            TimeSlot::where('barber_id', $validate['barber_id'])
-                ->where('date', $validate['booking_date'])
-                ->where('start_time', $validate['start_time'])
-                ->update([
-                    'booking_id' => $booking->id,
+            for($time = $validate['start_time']; $time < $validate['end_time']; $time = date('H:i', strtotime($time . ' +' . $service . ' minutes'))) {
+                TimeSlot::where('barber_id', $validate['barber_id'])
+                    ->where('date', $validate['booking_date'])
+                    ->where('start_time', $time)
+                    ->update([
+                        'booking_id' => $booking->id,
                     'status' => 'booked'
                 ]);
+            }
 
             return $booking;
         });
@@ -122,7 +129,7 @@ class BookingController extends Controller
         $booking = Booking::findOrFail($id);
 
         if (in_array($booking->status, ['cancelled', 'completed'])) {
-            return $this->errorResponse(null, 'Booking tidak dapat dibatalkan', 422);
+            return $this->errorResponse('Booking tidak dapat dibatalkan', 422);
         }
 
         $booking->update(['status' => 'cancelled']);
