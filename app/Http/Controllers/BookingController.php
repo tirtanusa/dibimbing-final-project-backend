@@ -18,8 +18,19 @@ class BookingController extends Controller
     use ApiResponse;
     public function index(Request $request)
     {
-        $bookings = Booking::with(['barber', 'service', 'user'])
-            ->paginate($request->get('limit', 10));
+        $query = Booking::with(['barber', 'service', 'user']);
+
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        if ($request->filled('date')) {
+            $query->whereDate('booking_date', $request->date);
+        }
+
+        $bookings = $query->latest()
+            ->paginate($request->get('limit', 5));
+
         return $this->successResponse($bookings, 'Data booking berhasil diambil');
     }
 

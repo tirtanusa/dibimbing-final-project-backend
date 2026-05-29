@@ -1,58 +1,331 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# ✂️ POS Barber App — Backend API
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+> RESTful API backend untuk sistem Point of Sale (POS) Barbershop, dibangun dengan **Laravel 13** dan **Sanctum** authentication.
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## 📋 Deskripsi
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+**POS Barber App** adalah backend API untuk mengelola operasional barbershop secara digital. Sistem ini mencakup manajemen barber, jadwal, layanan, booking, produk, transaksi, serta laporan bisnis. API ini dirancang untuk mendukung frontend React ([barber-frontend-app](https://github.com/tirtanusa/barber-frontend-app)) dengan arsitektur yang modular dan aman menggunakan role-based access control.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+---
 
-## Learning Laravel
+## 🚀 Tech Stack
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+| Teknologi            | Versi / Detail        |
+| -------------------- | --------------------- |
+| **PHP**              | ^8.3                  |
+| **Laravel**          | ^13.8                 |
+| **Laravel Sanctum**  | ^4.0 (Authentication) |
+| **Database**         | MySQL                 |
+| **Testing**          | Pest ^4.7             |
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+---
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+## 📁 Struktur Proyek
 
-## Agentic Development
-
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
-
-```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
+```
+pos-barber-app/
+├── app/
+│   ├── Http/
+│   │   ├── Controllers/
+│   │   │   ├── AuthController.php          # Login, Register, Logout, Me
+│   │   │   ├── UserController.php          # CRUD User Management
+│   │   │   ├── BarberController.php        # CRUD Barber
+│   │   │   ├── BarberScheduleController.php# Jadwal kerja barber
+│   │   │   ├── TimeSlotController.php      # Generate & kelola slot waktu
+│   │   │   ├── ServiceController.php       # CRUD Layanan barbershop
+│   │   │   ├── BookingController.php       # Booking & status management
+│   │   │   ├── ProductController.php       # CRUD Produk & stok
+│   │   │   ├── TransactionController.php   # Transaksi POS
+│   │   │   └── ReportController.php        # Laporan & analytics
+│   │   └── Middleware/
+│   │       └── RoleMiddleware.php          # Role-based access control
+│   ├── Models/
+│   │   ├── User.php
+│   │   ├── Barber.php
+│   │   ├── BarberSchedule.php
+│   │   ├── Booking.php
+│   │   ├── TimeSlot.php
+│   │   ├── Service.php
+│   │   ├── Product.php
+│   │   ├── Transaction.php
+│   │   └── TransactionItem.php
+│   └── Traits/
+│       └── ApiResponse.php                 # Standardized API response
+├── database/
+│   ├── migrations/                         # 12 migration files
+│   └── seeders/
+│       ├── DatabaseSeeder.php
+│       ├── UserSeeder.php
+│       ├── BarberSeeder.php
+│       ├── BarberScheduleSeeder.php
+│       ├── ServiceSeeder.php
+│       └── ProductSeeder.php
+├── routes/
+│   └── api.php                             # Semua API routes
+└── Postman/
+    └── Postman Endpoint Documentation.json # Collection untuk testing
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+---
 
-## Contributing
+## 🔐 Autentikasi & Otorisasi
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Menggunakan **Laravel Sanctum** dengan token-based authentication dan role-based middleware.
 
-## Code of Conduct
+### Roles
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+| Role      | Akses                                              |
+| --------- | -------------------------------------------------- |
+| **admin** | Full akses ke semua resource & laporan              |
+| **user**  | Booking, lihat transaksi sendiri, update profil     |
 
-## Security Vulnerabilities
+---
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+## 📡 API Endpoints
 
-## License
+### 🔑 Authentication
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+| Method | Endpoint          | Deskripsi              | Auth |
+| ------ | ----------------- | ---------------------- | ---- |
+| POST   | `/api/auth/login`    | Login user             | ❌   |
+| POST   | `/api/auth/register` | Registrasi user baru   | ❌   |
+| POST   | `/api/auth/logout`   | Logout (revoke token)  | ✅   |
+| GET    | `/api/auth/me`       | Profil user yang login | ✅   |
+
+---
+
+### 👥 Users (Admin Only)
+
+| Method | Endpoint               | Deskripsi          |
+| ------ | ---------------------- | ------------------ |
+| GET    | `/api/users`           | List semua user    |
+| POST   | `/api/users/add-user`  | Tambah user baru   |
+| GET    | `/api/users/{id}`      | Detail user        |
+| PUT    | `/api/users/{id}`      | Update user *(admin & user)* |
+| DELETE | `/api/users/{id}`      | Hapus user         |
+
+---
+
+### 💈 Barbers
+
+| Method | Endpoint                  | Deskripsi              | Auth  |
+| ------ | ------------------------- | ---------------------- | ----- |
+| GET    | `/api/barber`             | List semua barber      | ❌    |
+| GET    | `/api/barber/{id}`        | Detail barber          | ❌    |
+| POST   | `/api/barber/add-barber`  | Tambah barber          | Admin |
+| PUT    | `/api/barber/{id}`        | Update barber          | Admin |
+| DELETE | `/api/barber/{id}`        | Hapus barber           | Admin |
+
+---
+
+### 📅 Barber Schedules
+
+| Method | Endpoint                                  | Deskripsi            | Auth  |
+| ------ | ----------------------------------------- | -------------------- | ----- |
+| GET    | `/api/barber/{id}/schedule`               | Lihat jadwal barber  | ❌    |
+| POST   | `/api/barber/{id}/schedule`               | Tambah jadwal        | Admin |
+| PUT    | `/api/barber/{id}/schedule/{schedule_id}` | Update jadwal        | Admin |
+| DELETE | `/api/barber/{id}/schedule/{schedule_id}` | Hapus jadwal         | Admin |
+
+---
+
+### ⏰ Time Slots
+
+| Method | Endpoint                          | Deskripsi              | Auth  |
+| ------ | --------------------------------- | ---------------------- | ----- |
+| GET    | `/api/barber/{id}/slots`          | Lihat slot waktu       | ❌    |
+| POST   | `/api/barber/{id}/slots/generate` | Generate slot otomatis | Admin |
+| PATCH  | `/api/slots/{id}/block`           | Blokir slot            | Admin |
+| PATCH  | `/api/slots/{id}/unblock`         | Buka blokir slot       | Admin |
+
+---
+
+### 🛎️ Services
+
+| Method | Endpoint              | Deskripsi          | Auth  |
+| ------ | --------------------- | ------------------ | ----- |
+| GET    | `/api/services`       | List semua service | ❌    |
+| GET    | `/api/services/{id}`  | Detail service     | ❌    |
+| POST   | `/api/services`       | Tambah service     | Admin |
+| PUT    | `/api/services/{id}`  | Update service     | Admin |
+| DELETE | `/api/services/{id}`  | Hapus service      | Admin |
+
+---
+
+### 📋 Bookings
+
+| Method | Endpoint                       | Deskripsi                 | Auth       |
+| ------ | ------------------------------ | ------------------------- | ---------- |
+| POST   | `/api/bookings`                | Buat booking baru         | User/Admin |
+| GET    | `/api/bookings/my`             | Booking milik user login  | User/Admin |
+| GET    | `/api/bookings/{id}`           | Detail booking            | User/Admin |
+| PATCH  | `/api/bookings/{id}/cancel`    | Batalkan booking          | User/Admin |
+| GET    | `/api/bookings`                | List semua booking        | Admin      |
+| PATCH  | `/api/bookings/{id}/status`    | Update status booking     | Admin      |
+
+**Status Flow:** `pending` → `confirmed` → `in_progress` → `completed` | `cancelled`
+
+---
+
+### 📦 Products
+
+| Method | Endpoint                     | Deskripsi          | Auth  |
+| ------ | ---------------------------- | ------------------ | ----- |
+| GET    | `/api/products`              | List semua produk  | ❌    |
+| GET    | `/api/products/{id}`         | Detail produk      | ❌    |
+| POST   | `/api/products`              | Tambah produk      | Admin |
+| PUT    | `/api/products/{id}`         | Update produk      | Admin |
+| DELETE | `/api/products/{id}`         | Hapus produk       | Admin |
+| PATCH  | `/api/products/{id}/stock`   | Update stok produk | Admin |
+
+---
+
+### 💳 Transactions
+
+| Method | Endpoint                          | Deskripsi                   | Auth       |
+| ------ | --------------------------------- | --------------------------- | ---------- |
+| GET    | `/api/transactions`               | List semua transaksi        | Admin      |
+| POST   | `/api/transactions`               | Buat transaksi baru         | Admin      |
+| PATCH  | `/api/transactions/{id}/status`   | Update status transaksi     | Admin      |
+| GET    | `/api/transaction/my`             | Transaksi milik user login  | User       |
+| GET    | `/api/transactions/{id}`          | Detail transaksi            | User/Admin |
+
+**Payment Methods:** `cash`, `debit`, `credit`
+**Status:** `pending`, `success`, `failed`
+
+---
+
+### 📊 Reports (Admin Only)
+
+| Method | Endpoint                          | Deskripsi                           |
+| ------ | --------------------------------- | ----------------------------------- |
+| GET    | `/api/reports/summary`            | Dashboard summary (revenue, count)  |
+| GET    | `/api/reports/top-services`       | Top 10 service terlaris             |
+| GET    | `/api/reports/top-products`       | Top 10 produk terlaris              |
+| GET    | `/api/reports/top-barbers`        | Top 10 barber (by total booking)    |
+| GET    | `/api/reports/top-rated-barber`   | Top 10 barber (by rating) *(Public)* |
+| GET    | `/api/reports/revenue`            | Laporan revenue (daily/monthly/yearly) |
+
+---
+
+## ⚙️ Instalasi & Setup
+
+### Prerequisites
+
+- PHP >= 8.3
+- Composer
+- MySQL
+- Node.js & NPM
+
+### Langkah Instalasi
+
+```bash
+# 1. Clone repository
+git clone https://github.com/tirtanusa/pos-barber-app.git
+cd pos-barber-app
+
+# 2. Install dependencies
+composer install
+npm install
+
+# 3. Setup environment
+cp .env.example .env
+php artisan key:generate
+
+# 4. Konfigurasi database di .env
+# DB_CONNECTION=mysql
+# DB_HOST=127.0.0.1
+# DB_PORT=3306
+# DB_DATABASE=pos_barber_app
+# DB_USERNAME=root
+# DB_PASSWORD=
+
+# 5. Jalankan migration & seeder
+php artisan migrate
+php artisan db:seed
+
+# 6. Jalankan server
+php artisan serve
+```
+
+Atau gunakan script otomatis:
+
+```bash
+composer setup   # Install, migrate, build
+composer dev     # Jalankan server + queue + vite
+```
+
+---
+
+## 🧪 Testing
+
+```bash
+# Jalankan semua test
+php artisan test
+
+# Atau menggunakan Pest
+./vendor/bin/pest
+```
+
+---
+
+## 📬 Postman Collection
+
+File Postman Collection tersedia di folder `Postman/` untuk mempermudah testing API:
+
+```
+Postman/Postman Endpoint Documentation.json
+```
+
+Import file ini ke Postman untuk mendapatkan dokumentasi lengkap semua endpoint beserta contoh request/response.
+
+---
+
+## 🗃️ Database Schema
+
+```
+users
+├── id, name, email, password, phone_number, role
+│
+barbers
+├── id, name, phone, rating, is_active, specialization, photo
+│
+barber_schedules
+├── id, barber_id (FK), day_of_week, start_time, end_time
+│
+time_slots
+├── id, barber_id (FK), booking_id (FK), date, start_time, end_time, status
+│
+services
+├── id, name, price, duration_minutes, description
+│
+bookings
+├── id, user_id (FK), barber_id (FK), service_id (FK)
+├── booking_date, start_time, end_time, status, notes
+│
+products
+├── id, name, description, price, stock, category, image
+│
+transactions
+├── id, user_id (FK), booking_id (FK)
+├── subtotal_service, subtotal_product, total_payment
+├── payment_method, status
+│
+transaction_items
+├── id, transaction_id (FK), product_id (FK)
+├── quantity, unit_price, total_price
+```
+
+---
+
+## 🔗 Related Repository
+
+- **Frontend (React):** [barber-frontend-app](https://github.com/tirtanusa/barber-frontend-app)
+
+---
+
+## 📄 License
+
+This project is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
