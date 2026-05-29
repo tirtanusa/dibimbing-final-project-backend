@@ -8,6 +8,7 @@ use App\Traits\ApiResponse;
 use App\Models\TimeSlot;
 use App\Models\Service;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class BookingController extends Controller
 {
@@ -17,14 +18,17 @@ class BookingController extends Controller
     use ApiResponse;
     public function index(Request $request)
     {
-        $bookings = Booking::paginate($request->get('limit', 10));
+        $bookings = Booking::with(['barber', 'service', 'user'])
+            ->paginate($request->get('limit', 10));
         return $this->successResponse($bookings, 'Data booking berhasil diambil');
     }
 
     public function myBookings(Request $request)
     {
         $user = $request->user();
-        $bookings = Booking::where('user_id', $user->id)->paginate($request->get('limit', 10));
+        $bookings = Booking::with(['barber', 'service'])
+            ->where('user_id', $user->id)
+            ->paginate($request->get('limit', 10));
         return $this->successResponse($bookings, 'Data booking berhasil diambil');
     }
 
@@ -71,12 +75,14 @@ class BookingController extends Controller
             return $this->errorResponse( 'Slot waktu tidak tersedia, barber sudah memiliki booking di waktu ini', 409);
         }
 
-        $booking = DB::transaction(function() use ($validate) {
+        $service = Service::min('duration_minutes');
+        if (!$service) {
+            return $this->errorResponse(null, 'Tidak ada service yang tersedia', 404);
+        }
+
+        $booking = DB::transaction(function() use ($validate, $service) {
             $booking = Booking::create($validate + ['status' => 'pending']);
-            $service = Service::min('duration_minutes');
-            if (!$service) {
-                return $this->errorResponse(null, 'Tidak ada service yang tersedia', 404);
-            }
+            
             
             for($time = $validate['start_time']; $time < $validate['end_time']; $time = date('H:i', strtotime($time . ' +' . $service . ' minutes'))) {
                 TimeSlot::where('barber_id', $validate['barber_id'])
@@ -91,7 +97,10 @@ class BookingController extends Controller
             return $booking;
         });
         
-        return $this->createdResponse($booking, 'Data booking berhasil dibuat');
+        return $this->createdResponse(
+            $booking->load(['barber', 'service', 'user']),
+            'Data booking berhasil dibuat'
+        );
     }
 
     /**
@@ -99,7 +108,8 @@ class BookingController extends Controller
      */
     public function show(string $id)
     {
-        $booking = Booking::findOrFail($id);
+        $booking = Booking::with(['barber', 'service', 'user'])
+            ->findOrFail($id);
         return $this->successResponse($booking, 'Data booking berhasil diambil');
     }
 
