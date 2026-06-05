@@ -62,7 +62,7 @@ class BarberScheduleController extends Controller
             'day_of_week' => 'required|integer|min:0|max:6|unique:barber_schedules,day_of_week,'.$schedule_id.',id,barber_id,'.$request->barber_id,
             'start_time' => 'required|date_format:H:i',
             'end_time' => 'required|date_format:H:i|after:start_time',
-            'is_active' => 'nullable|boolean'
+            'is_active' => 'required|boolean'
         ],[
             'barber_id.required' => 'Barber ID wajib diisi',
             'barber_id.exists' => 'Barber ID tidak ditemukan',
@@ -75,6 +75,7 @@ class BarberScheduleController extends Controller
             'end_time.required' => 'Jam selesai wajib diisi',
             'end_time.date_format' => 'Jam selesai harus berupa format H:i',
             'end_time.after' => 'Jam selesai harus setelah jam mulai',
+            'is_active.required' => 'Is active wajib diisi',
             'is_active.boolean' => 'Is active harus berupa boolean'
         ]);
 
