@@ -86,7 +86,7 @@ class BarberScheduleController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $schedule_id)
+    public function destroy(string $id,string $schedule_id)
     {
         $schedule = BarberSchedule::findOrFail($schedule_id);
         $schedule->delete();
